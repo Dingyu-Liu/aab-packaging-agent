@@ -1,0 +1,16 @@
+{
+  "project_root": "/path/to/ios-export",
+  "xcode_project": "Unity-iPhone.xcodeproj",
+  "app_target": "Unity-iPhone",
+  "configuration": "Debug",
+  "test_bundle_id": "com.yourcompany.yourgame.sdktest",
+  "test_display_name": "Your Game Test",
+  "version": "1.0.2",
+  "build_number": "1",
+  "development_team": null,
+  "device_id": null,
+  "developer_dir": null,
+  "output_dir": "../YourGame-sdk03-delivery",
+  "allow_provisioning_updates": true,
+  "launch_after_install": true
+}

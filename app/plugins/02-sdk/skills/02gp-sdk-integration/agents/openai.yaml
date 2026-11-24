@@ -1,0 +1,4 @@
+interface:
+  display_name: "02GPSDK接入"
+  short_description: "Unity Android 02GP SDK 接入、测试包与真机验证"
+  default_prompt: "使用 $02gp-sdk-integration，按我提供的参数完成新 Unity 工程的 02GP SDK 接入，并直接构建、校验和交付 .test 测试包名 APK。"

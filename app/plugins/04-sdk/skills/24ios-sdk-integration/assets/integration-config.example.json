@@ -1,0 +1,15 @@
+{
+  "app_store_id": "YOUR_APP_STORE_ID",
+  "expected_config_endpoint": "https://your-config.example.com",
+  "tracking_usage_description": "请按本次 App 的实际用途填写跟踪授权说明",
+  "adjust_app_token": "YOUR_ADJUST_APP_TOKEN",
+  "adjust_environment": "production",
+  "pa_start_mode": 0,
+  "adjust_event_tokens": {
+    "firstrecharge": "YOUR_FIRSTRECHARGE_TOKEN",
+    "login": "YOUR_LOGIN_TOKEN",
+    "rechargeClick": "YOUR_RECHARGE_CLICK_TOKEN",
+    "register": "YOUR_REGISTER_TOKEN",
+    "registerClick": "YOUR_REGISTER_CLICK_TOKEN"
+  }
+}

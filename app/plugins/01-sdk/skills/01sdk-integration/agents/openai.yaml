@@ -1,0 +1,4 @@
+interface:
+  display_name: "01SDK接入"
+  short_description: "Unity iOS AF/FB 接入、默认竖屏与 H5 显式旋转、真机和交付"
+  default_prompt: "使用 $01sdk-integration（01SDK接入）按当前工程和实际网页契约完成接入或修复，启动/Loading 和默认网页竖屏，保留 H5 显式方向切换并在回退时恢复游戏原方向，按用户选择完成真机验证或源码交付。"

@@ -1,0 +1,4 @@
+interface:
+  display_name: "05IOSSDK接入"
+  short_description: "按实际 Unity iOS 工程接入 PAKit、ATT、Adjust 并自动安装测试包或交付一键脚本"
+  default_prompt: "使用 $05ios-sdk-integration，按我提供的工程、SDK 和参数完成接入；可用真机连接时安装独立测试包，没有可用设备时交付一键安装 .command 脚本。"

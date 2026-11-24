@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "id": "gp-build",
+  "name": "GP打包",
+  "version": "0.2.0",
+  "kind": "sdk",
+  "description": "macOS Unity 游戏预处理、持续自动修复、编译确认与 AAB 交付。",
+  "status": "ready",
+  "tags": [
+    "android",
+    "google-play",
+    "aab"
+  ],
+  "profiles": [
+    {
+      "id": "android-aab",
+      "name": "Android AAB",
+      "version": "0.2.0",
+      "platform": "android",
+      "description": "编译通过后由用户确认，再生成 Release AAB。",
+      "attribution": "沿用工程配置",
+      "skill": {
+        "path": "skills/gp-build/SKILL.md",
+        "version": "0.2.0"
+      },
+      "parameters": [
+        {
+          "key": "category",
+          "label": "应用类型",
+          "type": "select",
+          "default": "other",
+          "options": [
+            {
+              "label": "游戏",
+              "value": "game"
+            },
+            {
+              "label": "其他",
+              "value": "other"
+            }
+          ]
+        },
+        {
+          "key": "versionName",
+          "label": "目标版本号",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "versionCode",
+          "label": "Version Code",
+          "type": "number",
+          "required": true
+        },
+        {
+          "key": "module",
+          "label": "应用模块",
+          "type": "text"
+        },
+        {
+          "key": "variant",
+          "label": "Release 变体",
+          "type": "text"
+        }
+      ]
+    }
+  ]
+}

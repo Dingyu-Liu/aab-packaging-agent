@@ -1,0 +1,43 @@
+{
+  "project_dir": "/absolute/path/to/AndroidProject",
+  "production_application_id": "com.example.game",
+  "test_application_id": null,
+  "app_version_name": null,
+  "app_version_code": null,
+  "pa": {
+    "maven_coordinate": "com.pakit.05:ammo:1.0.3",
+    "repository_url": null,
+    "expected_domain": null,
+    "mode": 0,
+    "att": 1,
+    "identity_policy": "persistent_installation"
+  },
+  "adjust": {
+    "enabled": true,
+    "maven_coordinate": "com.adjust.sdk:adjust-android:5.8.0",
+    "environment": null,
+    "app_token": null,
+    "event_tokens": {
+      "firstrecharge": null,
+      "login": null,
+      "rechargeClick": null,
+      "register": null,
+      "registerClick": null
+    }
+  },
+  "host": {
+    "package_name": null,
+    "base_activity": null
+  },
+  "build": {
+    "module": ":launcher",
+    "build_type": "debug",
+    "sdk_dir": null
+  },
+  "delivery": {
+    "test_apk": true,
+    "install": false,
+    "aab": false,
+    "output_dir": "/absolute/path/to/outputs"
+  }
+}

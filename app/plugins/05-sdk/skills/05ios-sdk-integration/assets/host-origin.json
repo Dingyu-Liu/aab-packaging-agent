@@ -1,0 +1,22 @@
+{
+  "source": "Local production host after reverting WebKit snapshot/background regression",
+  "baseline_unity": "6000.0.77f1",
+  "baseline_minimum_ios": "17.2",
+  "sdk_runtime_controller": "PAWebViewController",
+  "adjust_api": "v5 initSdk / AdjustDelegate",
+  "adaptations": [
+    "Configurable tokens and mode",
+    "Configurable Loading / safe-area switches and first-page timeout"
+  ],
+  "original_file_sha256": {
+    "PAKitAdjustIntegration.m": "dbcc953d67b41243f5d511bc234ab31ffa55463c8c04669ba2900e0250f458d7",
+    "PAKitIntegration.h": "041e8f70637c09f0c910cdd617cb8716f8f939349397eeceb9f896f9dd9c79f0",
+    "PAKitSafeAreaViewController.m": "37deacd9faa23b1df7874a13ef9de79f3a2f07da06ec3d5db95a56e3fe081379",
+    "PAKitLoadingView.h": "40784e05b3a5d88b5c82a350a359175c251b3641e0d4a124a06dc0f2732322e5",
+    "PAKitAppController.mm": "608b01df3682b4d065cfb85a673a1f6ead7b15b50a1bcc814c0dbb077c645cc9",
+    "PAKitIntegration.m": "81fc143a038789ab66d8ce41964b8ffc22c5e271fd317102b51c2e5ed02802bb",
+    "PAKitAdjustIntegration.h": "881387d578bced8e269d7135cea23c90e52435a21709d92f2926fce102f730e6",
+    "PAKitLoadingView.m": "d691f8092b072bf758f272526ac9aa689247430c330194c7740702d809f85e8f",
+    "PAKitSafeAreaViewController.h": "46c71562e09b42a78e6ee05b88397b135837e34cfa99ca42b5f7d8280b4e1d10"
+  }
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "24IOS SDK接入"
+  short_description: "复用 iOS PAKit、ATT、Adjust 接入与加载适配及真机测试交付流程"
+  default_prompt: "使用 $24ios-sdk-integration 为指定 iOS 工程接入 PAKit、ATT 和 Adjust，适配加载与安全区域，并按本次要求准备正式或测试配置。"

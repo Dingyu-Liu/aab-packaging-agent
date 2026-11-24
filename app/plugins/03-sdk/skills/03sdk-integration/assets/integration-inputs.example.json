@@ -1,0 +1,55 @@
+{
+  "project": {
+    "root": "/path/to/new-project",
+    "kind": "auto",
+    "unity_editor": null,
+    "ios_export_dir": null,
+    "app_target": "Unity-iPhone"
+  },
+  "identity": {
+    "production_bundle_id": "read_from_project",
+    "test_bundle_id": "derive_production_bundle_id_plus_sdktest",
+    "test_display_name": null,
+    "version": "read_from_project_or_user",
+    "test_build_number": "next_test_build_number",
+    "app_store_id": "keep_existing_or_supply_numeric_id"
+  },
+  "attribution": {
+    "provider": "AppsFlyer",
+    "sdk_version": "keep_existing_compatible_version",
+    "dev_key_source": "existing_project_config_or_user_parameter",
+    "purchase_connector": "preserve_if_present",
+    "events": [],
+    "att_usage_description": "preserve_existing_localized_text_or_supply"
+  },
+  "routing": {
+    "provider": "PA",
+    "header_path": "/path/to/PA.h",
+    "library_path": "/path/to/libPAKit.a",
+    "mode": 0,
+    "attribution_mapping": {"Non-organic": 1, "Organic": 2},
+    "unknown_policy": "fallback_game_without_legacy_request",
+    "response_url_key_path": "discover_from_this_library_or_contract",
+    "endpoint_and_signing": "owned_by_sdk_unless_actual_contract_says_otherwise",
+    "persistent_uid": "reuse_existing_install_uid",
+    "h5_contract_source": null
+  },
+  "startup": {
+    "orientation": "portrait_during_loading_restore_original_game",
+    "loading_text": "Loading",
+    "att_max_seconds": 30,
+    "attribution_max_seconds": 35,
+    "config_max_seconds": 10,
+    "web_first_page_max_seconds": 15,
+    "waiting_watchdog_seconds": 50,
+    "game_audio": "blocked_until_game_visible",
+    "game_intro_video": "defer_activation_until_game_visible"
+  },
+  "delivery": {
+    "device_policy": "install_if_connected_else_generate_command",
+    "development_team": null,
+    "device_id": null,
+    "output_dir": null,
+    "launch_after_install": true
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "project": {
+    "root": "",
+    "demoRoot": "",
+    "unityVersion": "",
+    "targetPlatforms": [
+      "iOS"
+    ],
+    "authoritativeEvidence": [],
+    "existingChangesToPreserve": []
+  },
+  "application": {
+    "displayName": "",
+    "iosAppStoreId": "",
+    "bundleId": "",
+    "testBundleId": ""
+  },
+  "attribution": {
+    "provider": "appsflyer",
+    "appsFlyerDevKey": "",
+    "adjustAppToken": "",
+    "environment": "",
+    "eventMapping": []
+  },
+  "facebook": {
+    "appId": "",
+    "clientToken": "",
+    "displayName": "",
+    "eventMapping": [],
+    "verification": {
+      "settingsResourcePath": "",
+      "settingsPersistenceVerified": false,
+      "nativeConfigMatches": false,
+      "runtimeAppId": null,
+      "runtimeAppIdMatches": false,
+      "requestHost": null,
+      "requestAppIdMatches": false,
+      "activationEventObserved": false,
+      "flushResult": null,
+      "networkErrorCodes": [],
+      "evidenceRunId": null,
+      "observedUntilUtc": null,
+      "dashboardVerified": false
+    }
+  },
+  "entryApi": {
+    "url": "",
+    "channel": "",
+    "signingKey": "",
+    "contentType": "",
+    "attributionField": "",
+    "signatureContract": "",
+    "emptyAttributionContract": "",
+    "responseUrlField": "",
+    "confirmedReuseFromDemo": [],
+    "unverifiedAssumptions": [],
+    "protocolProfile": ""
+  },
+  "ios": {
+    "trackingUsageDescription": "",
+    "teamId": "",
+    "deviceIdentifier": ""
+  },
+  "validation": {
+    "testEventName": "integration_bridge_test",
+    "allowRevenueTest": false,
+    "supportedOrientations": [],
+    "requireBackendVerification": true,
+    "requireVendorDashboardVerification": false
+  },
+  "h5": {
+    "confirmedReplyProfile": "",
+    "attributionReplyType": "",
+    "appsFlyerEventReplyType": "",
+    "eventTokenAliasConfirmed": null,
+    "eventNamePrecedence": "",
+    "replySamplesSource": ""
+  },
+  "delivery": {
+    "deviceDeliveryRequested": false,
+    "archivePath": "",
+    "sourceArchiveComparisonVerified": false,
+    "installedBuildKind": "unknown",
+    "installedBundleId": "",
+    "installedArtifactSha256": "",
+    "qaTeardownVerified": false,
+    "normalInstallVerified": false,
+    "normalColdStartRunsVerified": 0
+  },
+  "startupPresentation": {
+    "profile": "01-single-loading-safe-area",
+    "loadingText": "Loading…",
+    "fontSizePoints": 17,
+    "loadingPosition": "root-view-center",
+    "iosRuntimeTextOwner": "native",
+    "unityTextInIosPlayer": false,
+    "nativeSpinner": false,
+    "webLayout": "native-safe-area",
+    "background": "#000000",
+    "overridesConfirmedByUser": [],
+    "verification": {
+      "labelCountAndPositionVerified": false,
+      "actualScreenScale": null,
+      "firstFrameVisualHandoffVerified": false,
+      "safeAreaGeometryVerified": false,
+      "physicalRotationVerified": false
+    }
+  }
+}

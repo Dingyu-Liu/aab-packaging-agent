@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UniWebView · AppsFlyer / Facebook 集成测试</title>
+<style>
+  :root { color-scheme: dark; --bg: #0f172a; --card: #111827; --text: #e5e7eb; --muted: #a8b5c8; --border: #475569; }
+  html { background: #000; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.5 system-ui, sans-serif; }
+  main { max-width: 1120px; margin: 24px auto; padding: 0 16px; }
+  h1 { font-size: 24px; } h2 { font-size: 18px; margin-top: 0; }
+  .hint { color: var(--muted); font-size: 14px; }
+  .grid { display: grid; gap: 16px; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 16px; min-width: 0; }
+  fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+  label { display: block; margin: 12px 0 4px; }
+  input, textarea, button { font: inherit; border: 1px solid var(--border); border-radius: 8px; color: var(--text); }
+  input, textarea { width: 100%; padding: 10px; background: #0b1220; }
+  textarea { min-height: 100px; resize: vertical; }
+  button { min-height: 44px; padding: 8px 14px; cursor: pointer; background: #25334a; }
+  button:hover { background: #334966; } button:disabled { opacity: .55; cursor: wait; }
+  :focus-visible { outline: 3px solid #7dd3fc; outline-offset: 3px; }
+  .row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  pre { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 13px; }
+  #log { height: 380px; overflow: auto; background: #0b1220; padding: 12px; }
+  code { overflow-wrap: anywhere; }
+  @media (min-width: 920px) { .grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+</style>
+</head>
+<body>
+<main>
+  <h1>UniWebView · AppsFlyer / Facebook 集成测试</h1>
+  <p class="hint">通过 <code>uniwebview://{action}?requestId=…</code> 发送请求；Unity 使用 <code>window.onUnityMessage(object)</code> 回调。
+    所有请求串行执行，每次等待最多 8 秒。普通浏览器没有原生桥时会超时，不会模拟成功。</p>
+  <p class="hint">Editor 事件返回 <code>ok:false / sdk_unavailable_in_editor</code>；原生接收成功也不代表分析平台已收到事件。</p>
+  <div class="grid">
+    <fieldset id="manualControls" aria-label="手动桥接测试">
+      <section class="card">
+        <h2>1. 设备方向 · setOrientation</h2>
+        <div class="row">
+          <button data-orientation="portrait">竖屏</button>
+          <button data-orientation="landscape">横屏</button>
+          <button data-orientation="landscape-left">横屏左</button>
+          <button data-orientation="landscape-right">横屏右</button>
+          <button data-orientation="auto">自动旋转</button>
+        </div>
+        <label for="customOrientation">自定义 orientation</label>
+        <input id="customOrientation" value="portrait-upside-down">
+        <div class="row"><button id="rotateCustom">设置自定义方向</button></div>
+      </section>
+      <section class="card">
+        <h2>2. 外部链接 · openURL</h2>
+        <label for="openUrl">url（仅 HTTP / HTTPS）</label>
+        <input id="openUrl" type="url" placeholder="https://example.com/">
+        <div class="row"><button id="openExternal">打开外部浏览器</button></div>
+      </section>
+      <section class="card">
+        <h2>3. 发送数据 · sendData</h2>
+        <label for="payloadArea">payload（JSON）</label>
+        <textarea id="payloadArea">{ "type": "user-info", "name": "张三", "level": 12 }</textarea>
+        <div class="row">
+          <button id="sendData">发送到 Unity</button>
+          <button id="fillLogin">登录示例</button>
+          <button id="fillNotice">通知示例</button>
+        </div>
+      </section>
+      <section class="card">
+        <h2>4. AppsFlyer 事件 · onEventJs</h2>
+        <label for="afEventName">eventName（事件名，非 Adjust token）</label>
+        <input id="afEventName" value="integration_bridge_test">
+        <div class="pair">
+          <div><label for="afRevenue">revenue（可选）</label><input id="afRevenue" inputmode="decimal" placeholder="1.99"></div>
+          <div><label for="afCurrency">currency</label><input id="afCurrency" placeholder="USD"></div>
+        </div>
+        <label for="afParams">params（JSON 对象）</label>
+        <textarea id="afParams">{ "af_content_id": "demo_item", "source": "web" }</textarea>
+        <label for="afCp">cp.* 参数（每行 key=value）</label>
+        <textarea id="afCp" placeholder="source=web&#10;campaign=demo"></textarea>
+        <p class="hint">每个键以 <code>cp.</code> 前缀发送；不要与 params 中的键重复。填写 revenue 时须提供 currency。</p>
+        <div class="row"><button id="sendAppsFlyer">发送 AppsFlyer 事件</button></div>
+      </section>
+      <section class="card">
+        <h2>5. Facebook 事件 · onFacebookEvent</h2>
+        <label for="fbEventName">eventName</label><input id="fbEventName" value="integration_bridge_test">
+        <label for="fbValue">valueToSum（可选，0 有效）</label><input id="fbValue" inputmode="decimal" placeholder="1.99">
+        <label for="fbParams">params（JSON 对象）</label><textarea id="fbParams">{ "source": "web", "item_id": "demo_item" }</textarea>
+        <div class="row"><button id="sendFacebook">发送 Facebook 事件</button></div>
+      </section>
+      <section class="card">
+        <h2>6. 归因与集成状态</h2>
+        <div class="row"><button id="getAttribution">getAppsFlyerData</button><button id="getStatus">getIntegrationStatus</button></div>
+        <p class="hint">归因回调：type=appsflyer，info 为原始归因对象并包含 appsflyer_id；requestId 按请求回传。</p>
+      </section>
+    </fieldset>
+    <div>
+      <section class="card">
+        <h2>自动测试</h2>
+        <p class="hint">仅点击下方按钮或本次显式测试驱动才执行，打开/刷新页面不会自动运行。会切换方向，并发送两条 AF、一条 FB 的 integration_bridge_test 测试事件（均不含金额）；不代表后台入库。旧 autorun 参数不再生效。此页面无法读取原生方向锁定和自动旋转掩码，套件结束后须由外部驱动恢复原状态；桥接 PASS 不表示恢复完成。</p>
+        <button id="runTests">运行 16 项桥接测试</button>
+        <p id="testStatus" role="status">尚未运行</p>
+        <pre id="report" aria-label="JSON 测试报告">{}</pre>
+      </section>
+      <section class="card">
+        <h2>请求与回调日志</h2>
+        <p id="feedback" role="status">等待操作</p>
+        <pre id="log" aria-label="桥接日志"></pre>
+        <button id="clearLog">清空日志</button>
+      </section>
+      <details class="card">
+        <summary>回调约定</summary>
+        <pre>{ "type": "bridgeAck", "requestId": "…", "action": "sendData",
+  "ok": true, "error": null, "data": { "payload": { "name": "张三" } } }
+
+{ "type": "appsflyer", "requestId": "…",
+  "info": { "appsflyer_id": "实际ID", "is_first_launch": false } }
+
+{ "type": "appsflyerEventAck", "requestId": "…", "ok": true,
+  "eventToken": "integration_bridge_test" }</pre>
+        <p class="hint">sendData 的 data.payload 回传解析后的 JSON 或原始 JSON 字符串；setOrientation 的 data.orientation 回传请求值。
+          getIntegrationStatus 返回 bridgeAck，data 为状态对象。无效事件名、JSON、URL 的 error 分别为
+          invalid_event_name、invalid_json、invalid_url。SDK 不可用不能代替输入校验。</p>
+        <p class="hint">完成后发送 <code>uniwebview://integrationTestResult?payload=…</code>，payload 为 URL 编码的完整 JSON 报告，无需回执。</p>
+      </details>
+    </div>
+  </div>
+</main>
+<script>
+'use strict';
+const byId = id => document.getElementById(id);
+const TIMEOUT_MS = 8000;
+const sessionId = Date.now().toString(36);
+const pending = new Map();
+let sequence = 0;
+let queue = Promise.resolve();
+let running = false;
+
+function log(label, value) {
+  const line = '[' + new Date().toISOString().slice(11, 19) + '] ' + label +
+    (value === undefined ? '' : ' ' + JSON.stringify(value));
+  const el = byId('log');
+  el.textContent = (el.textContent + line + '\n').split('\n').slice(-250).join('\n');
+  el.scrollTop = el.scrollHeight;
+}
+
+function bridgeUrl(action, params) {
+  return 'uniwebview://' + action + '?' + Object.keys(params)
+    .filter(key => params[key] !== undefined && params[key] !== null)
+    .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(String(params[key])))
+    .join('&');
+}
+
+function emit(action, params) {
+  const url = bridgeUrl(action, params);
+  log('WEB → UNITY', url);
+  window.location.href = url;
+}
+
+function request(action, params = {}) {
+  // Snapshot values when enqueued; IDs are generated by the page, never by form fields.
+  const args = Object.assign({}, params, { requestId: sessionId + '-' + (++sequence) });
+  const result = queue.then(() => new Promise((resolve, reject) => {
+    // Yield between navigations, including synchronous native callbacks.
+    setTimeout(() => {
+      const timer = setTimeout(() => {
+        pending.delete(args.requestId);
+        reject(new Error('callback_timeout: ' + action + ' / ' + args.requestId));
+      }, TIMEOUT_MS);
+      pending.set(args.requestId, { action, expectedEvent: args.eventName || args.eventToken || '', resolve, timer });
+      try { emit(action, args); }
+      catch (error) {
+        clearTimeout(timer);
+        pending.delete(args.requestId);
+        reject(error);
+      }
+    }, 0);
+  }));
+  queue = result.catch(() => undefined); // A timeout must not block later cases.
+  return result;
+}
+
+window.onUnityMessage = function(message) {
+  if (!message || typeof message !== 'object' || Array.isArray(message)) {
+    log('忽略非对象回调');
+    return;
+  }
+  log('UNITY → WEB', message);
+  const item = pending.get(message.requestId);
+  if (!item) return; // Ignore unsolicited, late, duplicate or mismatched replies.
+  const afEvent = item.action === 'onEventJs' || item.action === 'onAppsFlyerEvent';
+  if (afEvent) {
+    if (message.type !== 'appsflyerEventAck' || typeof message.ok !== 'boolean' ||
+        typeof message.eventToken !== 'string' || message.eventToken !== item.expectedEvent) return;
+    if (!message.ok && (typeof message.error !== 'string' || !message.error)) return;
+  } else if (item.action === 'getAppsFlyerData') {
+    if (message.type === 'appsflyer') {
+      if (!message.info || typeof message.info !== 'object' || Array.isArray(message.info) ||
+          typeof message.info.appsflyer_id !== 'string') return;
+    } else if (!(message.type === 'bridgeAck' && message.action === item.action &&
+                 message.ok === false && typeof message.error === 'string' && message.error)) return;
+  } else {
+    if (message.type !== 'bridgeAck' || message.action !== item.action || typeof message.ok !== 'boolean') return;
+    if (!message.ok && (typeof message.error !== 'string' || !message.error)) return;
+  }
+  clearTimeout(item.timer);
+  pending.delete(message.requestId);
+  item.resolve(message);
+};
+
+function objectParams(id) {
+  const parsed = JSON.parse(byId(id).value);
+  if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) throw new Error('params 必须是 JSON 对象');
+  return JSON.stringify(parsed);
+}
+
+function eventName(id) {
+  const value = byId(id).value.trim();
+  if (!value) throw new Error('eventName 不能为空');
+  return value;
+}
+
+function optionalNumber(id) {
+  const value = byId(id).value.trim();
+  if (!value) return undefined;
+  if (!Number.isFinite(Number(value))) throw new Error(id + ' 必须为有限数字');
+  return value;
+}
+
+function appsFlyerParams() {
+  const params = { eventName: eventName('afEventName'), params: objectParams('afParams') };
+  params.revenue = optionalNumber('afRevenue');
+  if (params.revenue !== undefined) {
+    params.currency = byId('afCurrency').value.trim().toUpperCase();
+    if (!/^[A-Z]{3}$/.test(params.currency)) throw new Error('currency 必须为三位货币代码');
+  }
+  byId('afCp').value.split('\n').forEach(line => {
+    line = line.trim();
+    if (!line || line.startsWith('#')) return;
+    const split = line.indexOf('=');
+    if (split <= 0) throw new Error('cp 参数须为 key=value');
+    const key = line.slice(0, split).trim();
+    if (!key) throw new Error('cp 参数键不能为空');
+    params['cp.' + key] = line.slice(split + 1).trim();
+  });
+  return params;
+}
+
+async function manual(action, makeParams) {
+  if (running) return;
+  try {
+    const params = makeParams ? makeParams() : {};
+    byId('feedback').textContent = action + '：排队 / 等待回调…';
+    const reply = await request(action, params);
+    byId('feedback').textContent = reply.ok === false ? action + '：' + reply.error :
+      action + '：已收到原生回调（不代表 SDK 真实投递）';
+  } catch (error) {
+    byId('feedback').textContent = String(error.message || error);
+    log('ERROR', String(error.message || error));
+  }
+}
+
+function assert(condition, message) { if (!condition) throw new Error(message); }
+function accepted(reply) {
+  assert(reply.type === 'bridgeAck' && reply.ok === true, 'expected successful bridgeAck');
+}
+function acceptedAppsFlyer(reply, name) {
+  assert(reply.type === 'appsflyerEventAck' && reply.ok === true && reply.eventToken === name, 'expected AppsFlyer event receipt');
+}
+function rejected(code, type = 'bridgeAck') {
+  return reply => assert(reply.type === type && reply.ok === false && reply.error === code,
+    'expected rejection: ' + code + '; received ' + String(reply.error));
+}
+
+async function runTests() {
+  if (running) return;
+  running = true;
+  byId('manualControls').disabled = true;
+  byId('runTests').disabled = true;
+  const report = { passed: false, sdkDeliveryVerified: false, cleanupCompleted: false, orientationRestoreRequired: true, cases: [] };
+  let editor = false;
+  const unicodePayload = { type: 'bridge-test', text: '张三 / café / 🎮 / & = + ? # %', nested: { level: 12 } };
+  const cases = [
+    ['integration status', 'getIntegrationStatus', {}, reply => {
+      accepted(reply);
+      assert(reply.data !== null && typeof reply.data === 'object' && !Array.isArray(reply.data), 'expected status data object');
+      editor = /Editor$/.test(reply.data.platform);
+    }],
+    ['AppsFlyer attribution transport', 'getAppsFlyerData', {}, reply => {
+      assert(reply.type === 'appsflyer' && reply.info && typeof reply.info === 'object' && !Array.isArray(reply.info), 'expected appsflyer/info object');
+      assert(typeof reply.info.appsflyer_id === 'string', 'missing appsflyer_id');
+      if (Object.prototype.hasOwnProperty.call(reply.info, 'is_first_launch'))
+        assert(typeof reply.info.is_first_launch === 'boolean', 'is_first_launch must remain boolean');
+      // An empty ID / missing conversion fields are not fabricated as an organic install.
+      // This response verifies transport, not SDK or dashboard delivery.
+    }],
+    ['Unicode payload echo', 'sendData', { payload: JSON.stringify(unicodePayload) }, reply => {
+      accepted(reply);
+      let payload = reply.data && reply.data.payload;
+      if (typeof payload === 'string') payload = JSON.parse(payload);
+      assert(payload && payload.type === unicodePayload.type && payload.text === unicodePayload.text &&
+        payload.nested && payload.nested.level === 12, 'Unicode payload did not roundtrip');
+    }],
+    ['AppsFlyer invalid event name', 'onEventJs', { eventName: '   ', params: '{}' }, rejected('invalid_event_name', 'appsflyerEventAck')],
+    ['Facebook invalid event name', 'onFacebookEvent', { eventName: '   ', params: '{}' }, rejected('invalid_event_name')],
+    ['AppsFlyer malformed JSON', 'onEventJs', { eventName: 'bridge_test', params: '{broken' }, rejected('invalid_json', 'appsflyerEventAck')],
+    ['Facebook malformed JSON', 'onFacebookEvent', { eventName: 'bridge_test', params: '{broken' }, rejected('invalid_json')],
+    ['sendData malformed JSON', 'sendData', { payload: '{broken' }, rejected('invalid_json')],
+    ['AppsFlyer event dispatch', 'onEventJs', { eventName: 'integration_bridge_test', params: '{"integration_test":true}' }, reply => {
+      if (editor) rejected('sdk_unavailable_in_editor', 'appsflyerEventAck')(reply);
+      else acceptedAppsFlyer(reply, 'integration_bridge_test');
+    }],
+    ['AppsFlyer eventToken alias dispatch', 'onEventJs', { eventToken: 'integration_bridge_test', params: '{"integration_test":true}' }, reply => {
+      if (editor) rejected('sdk_unavailable_in_editor', 'appsflyerEventAck')(reply);
+      else acceptedAppsFlyer(reply, 'integration_bridge_test');
+    }],
+    ['Facebook event dispatch', 'onFacebookEvent', { eventName: 'integration_bridge_test', params: '{"integration_test":true}' }, reply => {
+      if (editor) rejected('sdk_unavailable_in_editor')(reply);
+      else { accepted(reply); assert(reply.data.status === 'queued' && reply.data.deliveryVerified === false, 'expected queued status only'); }
+    }]
+  ];
+  ['portrait', 'landscape-left', 'landscape-right', 'auto'].forEach(orientation => {
+    cases.push(['orientation ' + orientation, 'setOrientation', { orientation }, reply => {
+      accepted(reply);
+      assert(reply.data && reply.data.orientation === orientation, 'orientation echo mismatch');
+    }]);
+  });
+  cases.push(['reject javascript URL', 'openURL', { url: 'javascript:void(0)' }, rejected('invalid_url')]);
+  try {
+    for (const [name, action, params, check] of cases) {
+      byId('testStatus').textContent = (report.cases.length + 1) + '/' + cases.length + '：' + name;
+      const result = { name, action, passed: false, error: null, reply: null };
+      try {
+        const reply = await request(action, params);
+        // Snapshot only JSON values so neither Error objects nor callbacks enter the report.
+        result.reply = JSON.parse(JSON.stringify(reply));
+        check(reply);
+        result.passed = true;
+      } catch (error) { result.error = String(error.message || error); }
+      report.cases.push(result);
+      byId('report').textContent = JSON.stringify(report, null, 2);
+    }
+    report.passed = report.cases.length === cases.length && report.cases.every(item => item.passed);
+    report.finishedAt = new Date().toISOString();
+    byId('report').textContent = JSON.stringify(report, null, 2);
+    byId('testStatus').textContent = (report.passed ? 'PASS' : 'FAIL') + ' · ' +
+      report.cases.filter(item => item.passed).length + '/' + cases.length + '（仅桥接验证，原方向仍需验证恢复）';
+    // This terminal notification is intentionally not a request awaiting an ack.
+    await queue;
+    await new Promise(resolve => setTimeout(resolve, 0));
+    emit('integrationTestResult', { payload: JSON.stringify(report) });
+  } catch (error) {
+    byId('testStatus').textContent = '报告发送失败：' + String(error.message || error);
+    log('REPORT ERROR', String(error.message || error));
+  } finally {
+    running = false;
+    byId('manualControls').disabled = false;
+    byId('runTests').disabled = false;
+  }
+  return report;
+}
+
+document.querySelectorAll('[data-orientation]').forEach(button => {
+  button.onclick = () => manual('setOrientation', () => ({ orientation: button.dataset.orientation }));
+});
+byId('rotateCustom').onclick = () => manual('setOrientation', () => ({ orientation: byId('customOrientation').value.trim() }));
+byId('openExternal').onclick = () => manual('openURL', () => {
+  const url = byId('openUrl').value.trim();
+  const parsed = new URL(url);
+  if (parsed.protocol !== 'https:' && parsed.protocol !== 'http:') throw new Error('仅允许 HTTP / HTTPS URL');
+  return { url };
+});
+byId('sendData').onclick = () => manual('sendData', () => ({ payload: JSON.stringify(JSON.parse(byId('payloadArea').value)) }));
+byId('fillLogin').onclick = () => { byId('payloadArea').value = JSON.stringify({ type: 'login', userId: 'demo_user', token: 'demo_only', expiresIn: 3600 }, null, 2); };
+byId('fillNotice').onclick = () => { byId('payloadArea').value = JSON.stringify({ type: 'notice', title: '活动开始', body: '限时双倍奖励已开启！' }, null, 2); };
+byId('sendAppsFlyer').onclick = () => manual('onEventJs', appsFlyerParams);
+byId('sendFacebook').onclick = () => manual('onFacebookEvent', () => ({ eventName: eventName('fbEventName'), valueToSum: optionalNumber('fbValue'), params: objectParams('fbParams') }));
+byId('getAttribution').onclick = () => manual('getAppsFlyerData');
+byId('getStatus').onclick = () => manual('getIntegrationStatus');
+byId('clearLog').onclick = () => { byId('log').textContent = ''; };
+byId('runTests').onclick = runTests;
+// Exposed for local harnesses / developer-console checks; no simulated native replies.
+window.integrationBridge = { request, runTests };
+// No automatic suite on page load, including legacy ?autorun=1 URLs.
+</script>
+</body>
+</html>

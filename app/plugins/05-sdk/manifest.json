@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "id": "05-sdk",
+  "name": "05SDK 接入",
+  "version": "1.0.0",
+  "kind": "sdk",
+  "status": "ready",
+  "description": "05 合作方 SDK 接入（iOS Xcode 与 Android 原生工程）。",
+  "tags": [
+    "SDK",
+    "05",
+    "ios",
+    "android"
+  ],
+  "profiles": [
+    {
+      "id": "05-ios",
+      "partner": "05",
+      "name": "05SDK 接入 · iOS",
+      "version": "2026.11.06.1",
+      "platform": "ios",
+      "description": "05 合作方 SDK 接入；流程与 01 大致相同，工程为 Xcode 原生工程（非 Unity）。",
+      "attribution": "custom",
+      "skill": {
+        "path": "skills/05ios-sdk-integration/SKILL.md",
+        "version": "2026.11.06.1"
+      },
+      "parameters": []
+    },
+    {
+      "id": "05-android",
+      "partner": "05",
+      "name": "05SDK 接入 · Android",
+      "version": "2026.11.06.1",
+      "platform": "android",
+      "description": "05 合作方 SDK 接入；流程与 01 大致相同，工程为 Android 原生工程（非 Unity）。",
+      "attribution": "custom",
+      "skill": {
+        "path": "skills/05gp-sdk-integration/SKILL.md",
+        "version": "2026.11.06.1"
+      },
+      "parameters": []
+    }
+  ]
+}

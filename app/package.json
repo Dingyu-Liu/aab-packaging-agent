@@ -1,0 +1,7 @@
+{
+  "name": "partner-agent",
+  "version": "0.1.21",
+  "type": "module",
+  "main": "desktop/main.cjs",
+  "description": "合作方 SDK 接入与业务脚本的本地 Agent 工作台"
+}

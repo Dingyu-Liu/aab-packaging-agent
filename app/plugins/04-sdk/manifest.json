@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "04-sdk",
+  "name": "04SDK 接入",
+  "version": "1.0.0",
+  "kind": "sdk",
+  "status": "ready",
+  "description": "04 合作方 SDK 接入（Xcode 原生工程）。",
+  "tags": [
+    "SDK",
+    "04",
+    "ios"
+  ],
+  "profiles": [
+    {
+      "id": "04-ios",
+      "partner": "04",
+      "name": "04SDK 接入 · iOS",
+      "version": "1.0.0",
+      "platform": "ios",
+      "description": "04 合作方 SDK 接入；流程与 01 大致相同，工程为 Xcode 原生工程（非 Unity）。",
+      "attribution": "custom",
+      "skill": {
+        "path": "skills/24ios-sdk-integration/SKILL.md",
+        "version": "1.0.0"
+      },
+      "parameters": []
+    }
+  ]
+}

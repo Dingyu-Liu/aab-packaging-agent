@@ -1,0 +1,2 @@
+# Only check_signing_key.py requires this; the other helpers use the standard library.
+PyYAML>=6.0,<7

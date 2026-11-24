@@ -1,0 +1,49 @@
+{
+  "project": {
+    "path": "/ABS/PATH/TO/iOS Export/Unity-iPhone.xcodeproj",
+    "target": "Unity-iPhone",
+    "framework_target": "UnityFramework",
+    "scheme": "Unity-iPhone"
+  },
+  "app": {
+    "bundle_id": "com.example.game",
+    "version": "1.0.0",
+    "build": "1",
+    "tracking_usage_description": "请填写本 App 实际跟踪用途，示例不能直接用于发布"
+  },
+  "sdk": {
+    "xcframework": "/ABS/PATH/TO/PAKit.xcframework",
+    "app_store_id": "YOUR_APP_STORE_NUMERIC_ID",
+    "expected_config_endpoint": "https://YOUR_REAL_CONFIG_HOST",
+    "start_mode": 0
+  },
+  "adjust": {
+    "sdk_xcframework": "/ABS/PATH/TO/AdjustSdk.xcframework",
+    "signature_xcframework": "/ABS/PATH/TO/AdjustSigSdk.xcframework",
+    "app_token": "YOUR_ADJUST_APP_TOKEN",
+    "environment": "production",
+    "event_tokens": {
+      "firstrecharge": "YOUR_FIRSTRECHARGE_TOKEN",
+      "login": "YOUR_LOGIN_TOKEN",
+      "rechargeClick": "YOUR_RECHARGE_CLICK_TOKEN",
+      "register": "YOUR_REGISTER_TOKEN",
+      "registerClick": "YOUR_REGISTER_CLICK_TOKEN"
+    }
+  },
+  "runtime": {
+    "unity_profile": "unity6000-ios17"
+  },
+  "ui": {
+    "startup_loading": true,
+    "safe_area": true,
+    "initial_page_timeout_seconds": 60
+  },
+  "test": {
+    "bundle_id": "com.example.game.sdktest",
+    "team_id": "",
+    "device_id": ""
+  },
+  "xcode": {
+    "developer_dir": "/Applications/Xcode.app/Contents/Developer"
+  }
+}

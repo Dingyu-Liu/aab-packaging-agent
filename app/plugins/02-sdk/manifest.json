@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "02-sdk",
+  "name": "02SDK 接入",
+  "version": "1.0.0",
+  "kind": "sdk",
+  "status": "ready",
+  "description": "02 合作方 SDK 接入（Android 原生工程）。",
+  "tags": [
+    "SDK",
+    "02",
+    "android"
+  ],
+  "profiles": [
+    {
+      "id": "02-android",
+      "partner": "02",
+      "name": "02SDK 接入 · Android",
+      "version": "2026.11.12.1",
+      "platform": "android",
+      "description": "02 合作方 SDK 接入；流程与 01 大致相同，工程为 Android Gradle 原生工程（非 Unity）。",
+      "attribution": "custom",
+      "skill": {
+        "path": "skills/02gp-sdk-integration/SKILL.md",
+        "version": "2026.11.12.1"
+      },
+      "parameters": []
+    }
+  ]
+}

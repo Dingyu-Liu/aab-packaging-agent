@@ -1,0 +1,140 @@
+using System;
+using System.IO;
+using System.Linq;
+using UnityEditor;
+using UnityEditor.Build.Reporting;
+using UnityEngine;
+
+// Replace __TOKENS__ from the integration parameters before copying this file
+// to Assets/Editor/Partner02Build.cs.
+public static class Partner02Build
+{
+    private const string TestApplicationId = "__TEST_APPLICATION_ID__";
+    private const string FormalApplicationId = "__FORMAL_APPLICATION_ID__";
+    private const string VersionName = "__VERSION_NAME__";
+    private const int VersionCode = __VERSION_CODE__;
+    private const int MinSdk = __MIN_SDK__;
+    private const int TargetSdk = __TARGET_SDK__;
+    private const string TestApkPath = "__TEST_APK_OUTPUT_PATH__";
+    private const string AabPath = "__AAB_OUTPUT_PATH__";
+    private const string AndroidStudioPath = "__ANDROID_STUDIO_OUTPUT_PATH__";
+    private const string KeystorePath = "__FORMAL_KEYSTORE_PATH__";
+    private const string KeyAlias = "__FORMAL_KEY_ALIAS__";
+    private const string KeystorePasswordEnv = "PARTNER02_KEYSTORE_PASSWORD";
+
+    [MenuItem("Partner02/Build/Test APK")]
+    public static void BuildAndroidTestApk()
+    {
+        ConfigureAndroid();
+        string output = Path.GetFullPath(TestApkPath);
+        Build(output, TestApplicationId, false, false);
+    }
+
+    [MenuItem("Partner02/Build/Android AAB")]
+    public static void BuildAndroidAab()
+    {
+        ConfigureAndroid();
+        string output = Path.GetFullPath(AabPath);
+        Build(output, FormalApplicationId, true, false);
+    }
+
+    [MenuItem("Partner02/Build/Android Studio Project")]
+    public static void ExportAndroidStudioProject()
+    {
+        ConfigureAndroid();
+        string output = Path.GetFullPath(AndroidStudioPath);
+        Build(output, FormalApplicationId, false, true);
+    }
+
+    private static void ConfigureAndroid()
+    {
+        EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Android, BuildTarget.Android);
+    }
+
+    private static void Build(string outputPath, string applicationId, bool appBundle, bool exportProject)
+    {
+        if (string.IsNullOrEmpty(outputPath)) throw new InvalidOperationException("Output path is empty");
+        string directory = Path.GetDirectoryName(outputPath);
+        if (string.IsNullOrEmpty(directory)) throw new InvalidOperationException("Invalid output path: " + outputPath);
+        Directory.CreateDirectory(directory);
+
+        string[] scenes = EditorBuildSettings.scenes
+            .Where(scene => scene.enabled)
+            .Select(scene => scene.path)
+            .ToArray();
+        if (scenes.Length == 0) throw new InvalidOperationException("No enabled scenes in Build Settings");
+
+        string originalPackage = PlayerSettings.GetApplicationIdentifier(BuildTargetGroup.Android);
+        string originalVersion = PlayerSettings.bundleVersion;
+        int originalVersionCode = PlayerSettings.Android.bundleVersionCode;
+        AndroidSdkVersions originalMin = PlayerSettings.Android.minSdkVersion;
+        AndroidSdkVersions originalTarget = PlayerSettings.Android.targetSdkVersion;
+        AndroidArchitecture originalAbi = PlayerSettings.Android.targetArchitectures;
+        UIOrientation originalOrientation = PlayerSettings.defaultInterfaceOrientation;
+        bool originalCustomKeystore = PlayerSettings.Android.useCustomKeystore;
+        bool originalDevelopment = EditorUserBuildSettings.development;
+        bool originalAppBundle = EditorUserBuildSettings.buildAppBundle;
+        bool originalExportProject = EditorUserBuildSettings.exportAsGoogleAndroidProject;
+
+        try
+        {
+            PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.Android, applicationId);
+            PlayerSettings.bundleVersion = VersionName;
+            PlayerSettings.Android.bundleVersionCode = VersionCode;
+            PlayerSettings.Android.minSdkVersion = (AndroidSdkVersions)MinSdk;
+            PlayerSettings.Android.targetSdkVersion = (AndroidSdkVersions)TargetSdk;
+            PlayerSettings.Android.targetArchitectures = AndroidArchitecture.ARM64;
+            PlayerSettings.defaultInterfaceOrientation = UIOrientation.Portrait;
+            PlayerSettings.allowedAutorotateToLandscapeLeft = false;
+            PlayerSettings.allowedAutorotateToLandscapeRight = false;
+            PlayerSettings.allowedAutorotateToPortrait = false;
+            PlayerSettings.allowedAutorotateToPortraitUpsideDown = false;
+            PlayerSettings.Android.resizeableActivity = false;
+            PlayerSettings.Android.startInFullscreen = true;
+            EditorUserBuildSettings.buildAppBundle = appBundle;
+            EditorUserBuildSettings.exportAsGoogleAndroidProject = exportProject;
+            EditorUserBuildSettings.development = !appBundle && !exportProject;
+
+            bool customKeystore = appBundle;
+            PlayerSettings.Android.useCustomKeystore = customKeystore;
+            if (customKeystore)
+            {
+                string password = Environment.GetEnvironmentVariable(KeystorePasswordEnv);
+                if (string.IsNullOrEmpty(password))
+                    throw new InvalidOperationException("Missing environment variable: " + KeystorePasswordEnv);
+                PlayerSettings.Android.keystoreName = Path.GetFullPath(KeystorePath);
+                PlayerSettings.Android.keyaliasName = KeyAlias;
+                PlayerSettings.Android.keystorePass = password;
+                PlayerSettings.Android.keyaliasPass = password;
+            }
+
+            BuildPlayerOptions options = new BuildPlayerOptions
+            {
+                scenes = scenes,
+                locationPathName = outputPath,
+                target = BuildTarget.Android,
+                targetGroup = BuildTargetGroup.Android,
+                options = EditorUserBuildSettings.development ? BuildOptions.Development : BuildOptions.None
+            };
+
+            BuildReport report = BuildPipeline.BuildPlayer(options);
+            Debug.Log("Partner02 build: " + outputPath + ", result=" + report.summary.result);
+            if (report.summary.result != BuildResult.Succeeded)
+                throw new InvalidOperationException("Partner02 build failed: " + report.summary.result);
+        }
+        finally
+        {
+            PlayerSettings.SetApplicationIdentifier(BuildTargetGroup.Android, originalPackage);
+            PlayerSettings.bundleVersion = originalVersion;
+            PlayerSettings.Android.bundleVersionCode = originalVersionCode;
+            PlayerSettings.Android.minSdkVersion = originalMin;
+            PlayerSettings.Android.targetSdkVersion = originalTarget;
+            PlayerSettings.Android.targetArchitectures = originalAbi;
+            PlayerSettings.defaultInterfaceOrientation = originalOrientation;
+            PlayerSettings.Android.useCustomKeystore = originalCustomKeystore;
+            EditorUserBuildSettings.development = originalDevelopment;
+            EditorUserBuildSettings.buildAppBundle = originalAppBundle;
+            EditorUserBuildSettings.exportAsGoogleAndroidProject = originalExportProject;
+        }
+    }
+}

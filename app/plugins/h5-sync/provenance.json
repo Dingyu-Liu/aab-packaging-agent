@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "sourceAsset": "H5更新助手.zip / scripts/feishu_h5_sync.py",
+  "originalSha256": "8f68f9601fcb9caf952dd6f3f59c1a91227ed8ac9607711e292945d254777ad9",
+  "derivedSha256": "7133d58a5d0875ab78d0b6433d0253b172dc047c5a8c5aa81b442579aff16cd3",
+  "date": "2026-11-09",
+  "ownership": "Locally discovered asset authorized by the user for reference in this task; original ownership retained. No additional open-source license grant is asserted.",
+  "fixedResourceDefaultsRemoved": [
+    "FEISHU_SH",
+    "DEFAULT_SOURCE_TOKEN",
+    "DEFAULT_PIVOT_SHEET",
+    "DEFAULT_RAW_SHEET",
+    "DEFAULT_BASE_TOKEN",
+    "DEFAULT_TABLE_ID",
+    "DEFAULT_PREVIEW_USER",
+    "DEFAULT_GROUP_CHAT"
+  ],
+  "changes": [
+    "Only online fetch-source/fetch-config/scan/sync commands retained",
+    "All fixed resource identifiers and recipient/group defaults replaced by environment or empty values",
+    "No run/expand/analysis/card/message CLI entries",
+    "Strict finite explicit metrics; no missing-source zero fallback",
+    "Duplicate source/config/date matches and incomplete config pagination rejected",
+    "CLI nonzero/invalid JSON/error envelopes fail closed",
+    "Writes require per-invocation PARTNER_H5_ALLOW_WRITE=1",
+    "Date scan requires one exact date cell, not a matching substring",
+    "Restored the original H5 report preset as separate local text; excludes execution failures from daily content",
+    "Empty pivots may use an explicit settled-row fallback with validated schema, date bound and complete date-index coverage; never repeats revenue sharing"
+  ]
+}

@@ -1,0 +1,13 @@
+# Personal configuration and build outputs
+.DS_Store
+.local-data/
+node_modules/
+.env
+.env.*
+!.env.example
+*.jks
+*.keystore
+*.p12
+*.pfx
+*.mobileprovision
+*.log

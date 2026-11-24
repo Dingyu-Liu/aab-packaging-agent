@@ -1,0 +1,25 @@
+{
+  "sourceArchive": "消耗-sync-migration.zip",
+  "sourcePrefix": "finance-sync-migration/sync/",
+  "sourceSha256": {
+    "run_consume.py": "004391c6d312d87b7d45bfada3ee97b3c38a04f15c91998654e03020fa22d8d9",
+    "run_ads.py": "c8fcca48e12449bfa1787c1f8e9c4548cb3cecaa67c17652c4e582db82cdb6b7",
+    "dapan_sync.py": "0a16e42e74dffe63994e37943c30610cf235d569d6bedcdc388ab00c997e9ffa",
+    "full_review.py": "122cc8d1354ef7be99e1f4d1f9145a497f2714eccb33c83ef88edd83f69a237b",
+    "sync_log.py": "26cd4ac40a4f51fa50d530344adb3243d9acd03c49087145817bc6c431b3560a",
+    "codex_lark_adapter.py": "86b5c2e613f03a378318922c4180a6497cd1c2fb26ddc24fdf582e3c24b53747",
+    "sync_daily_summary.py": "80b64dc0a6e4af583810197ec0fb2b707b39cf59f7638a2b2dc65f324835c8a2",
+    "sync_relay.py": "0611551320c91a205bd42d4d05642b9c2da9e4bfe3f0cc59dc83e0e669fdd9d9",
+    "log_query.py": "bf735233e6d309742a1bd380657fcaa0260763b4560733223feeff22faa96810"
+  },
+  "packagingChanges": [
+    "Copy only the listed Python sources; exclude setup instructions, credentials, snapshots, audit databases and other runtime files.",
+    "Use deployment-selected CLI/launcher in every API, card and relay module; reject nonzero CLI exits.",
+    "Preserve consume snapshot when refreshing advertising rules.",
+    "Stop consume workflow on failed consumption subprocess.",
+    "Add explicit read-only bootstrap_rules.py for isolated consume sync / dapan runs.",
+    "Keep source synchronization order, overlay formulas, dry-run local audit and conservative server evidence verification.",
+    "Replace message delivery with a read-only local daily report bound to the current run; remove recipients and remote dashboard maintenance.",
+    "Add explicit consumption dates (up to 31 consecutive days), filter cell writes, and bind dashboard/report date to the last selected day with per-rule date evidence."
+  ]
+}

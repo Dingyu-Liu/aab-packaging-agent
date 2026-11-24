@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "03-sdk",
+  "name": "03SDK 接入",
+  "version": "1.0.0",
+  "kind": "sdk",
+  "status": "ready",
+  "description": "03 合作方 SDK 接入（Xcode 原生工程）。",
+  "tags": [
+    "SDK",
+    "03",
+    "ios"
+  ],
+  "profiles": [
+    {
+      "id": "03-ios",
+      "partner": "03",
+      "name": "03SDK 接入 · iOS",
+      "version": "2026.11.12.1",
+      "platform": "ios",
+      "description": "03 合作方 SDK 接入；流程与 01 大致相同，工程为 Xcode 原生工程（非 Unity）。",
+      "attribution": "custom",
+      "skill": {
+        "path": "skills/03sdk-integration/SKILL.md",
+        "version": "2026.11.12.1"
+      },
+      "parameters": []
+    }
+  ]
+}

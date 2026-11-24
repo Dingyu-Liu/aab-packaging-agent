@@ -1,0 +1,5 @@
+{
+  "schemaVersion": 1,
+  "description": "Text skill snapshots; source paths identify the authoring machine. Runtime uses packaged relative paths.",
+  "snapshots": []
+}

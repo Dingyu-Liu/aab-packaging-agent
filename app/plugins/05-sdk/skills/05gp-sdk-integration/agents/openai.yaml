@@ -1,0 +1,4 @@
+interface:
+  display_name: "05GPsdk接入"
+  short_description: "Android PA 与 Adjust 自动接入，并交付独立测试包名 APK"
+  default_prompt: "使用 $05gp-sdk-integration，按提供的工程和参数接入 PA 与 Adjust，校验后交付测试包名 APK。"

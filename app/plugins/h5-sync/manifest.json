@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "id": "h5-sync",
+  "name": "H5 飞书数据同步",
+  "version": "0.3.1",
+  "kind": "script",
+  "description": "按日期同步 H5 数据到飞书分表，先预演目标和数据，再同步并核对写入结果。",
+  "status": "ready",
+  "tags": [
+    "H5",
+    "飞书",
+    "同步",
+    "预演"
+  ],
+  "profiles": [],
+  "script": {
+    "runner": "h5-sync",
+    "supportsDryRun": true,
+    "parameters": [
+      {
+        "key": "dates",
+        "label": "目标日期（逗号分隔）",
+        "type": "text",
+        "required": true,
+        "placeholder": "YYYY-MM-DD,YYYY-MM-DD",
+        "help": "填写连续日期，按先后顺序用逗号分隔，最多31天。"
+      },
+      {
+        "key": "sourceToken",
+        "label": "来源电子表格 Token",
+        "type": "secret",
+        "required": false,
+        "placeholder": "留空使用已配置的表格",
+        "help": "默认由后端自动读取；仅更换表格时填写。"
+      },
+      {
+        "key": "sheetId",
+        "label": "来源工作表 ID",
+        "type": "text",
+        "required": false,
+        "placeholder": "留空使用已配置的表格",
+        "help": "默认由后端自动读取；仅更换表格时填写。"
+      },
+      {
+        "key": "baseToken",
+        "label": "配置多维表格 Token",
+        "type": "secret",
+        "required": false,
+        "placeholder": "留空使用已配置的表格",
+        "help": "默认由后端自动读取；仅更换表格时填写。"
+      },
+      {
+        "key": "tableId",
+        "label": "配置数据表 ID",
+        "type": "text",
+        "required": false,
+        "placeholder": "留空使用已配置的表格",
+        "help": "默认由后端自动读取；仅更换表格时填写。"
+      },
+      {
+        "key": "workers",
+        "label": "并发数",
+        "type": "number",
+        "default": 4,
+        "help": "同时处理的目标数量，1至16，默认4。"
+      }
+    ],
+    "notes": "日常更新仅需选择日期，来源表格与同步配置由后端读取。透视页为空时，仅使用本机明确配置且已核对为结算值的明细重建目标日期汇总，不重复分成、不把缺失数据补零。每个产品独立处理，目标、权限、日期或来源问题不阻断其他产品。正式更新后按原预设生成独立 H5 日报（收益、展示、点击、eCPM、CTR、异动和 Top10），失败清单与执行状态另行展示和复制。日报只统计完成回读的产品；统计范围不完整时注明部分统计。不自动扩行，不发送消息。"
+  }
+}

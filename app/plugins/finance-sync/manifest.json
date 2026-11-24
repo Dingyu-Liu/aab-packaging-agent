@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "id": "finance-sync",
+  "name": "消耗与广告数据更新",
+  "version": "0.3.1",
+  "kind": "script",
+  "description": "由本地 App 管理同步代码与运行依赖，更新消耗或广告数据，保留任务独立的快照、结果与审计。",
+  "status": "ready",
+  "tags": [
+    "消耗",
+    "广告",
+    "大盘",
+    "飞书",
+    "脚本"
+  ],
+  "profiles": [],
+  "script": {
+    "runner": "finance-sync",
+    "parameters": [
+      {
+        "key": "mode",
+        "label": "同步范围",
+        "type": "select",
+        "options": [
+          {
+            "value": "consume",
+            "label": "消耗 + 大盘"
+          },
+          {
+            "value": "ads",
+            "label": "仅广告（TopOn → MAX/AdMob）"
+          },
+          {
+            "value": "dapan",
+            "label": "仅刷新大盘"
+          }
+        ],
+        "required": true,
+        "default": "consume",
+        "help": "按现有规则同步所选业务范围。"
+      },
+      {
+        "key": "dates",
+        "label": "更新日期（逗号分隔）",
+        "type": "text",
+        "required": false,
+        "placeholder": "YYYY-MM-DD,YYYY-MM-DD",
+        "help": "仅消耗更新可用；填写连续日期，最多31天。未指定时沿用全部历史同步。大盘和日报使用所选日期范围的结束日。"
+      },
+      {
+        "key": "pushAudit",
+        "label": "推送审计到飞书中转",
+        "type": "boolean",
+        "default": false,
+        "help": "消耗或广告同步可用；开启后把审计记录推送到已配置中转。"
+      },
+      {
+        "key": "serial",
+        "label": "广告来源串行执行",
+        "type": "boolean",
+        "default": false,
+        "help": "仅广告同步可用；按来源顺序执行。"
+      }
+    ],
+    "supportsDryRun": true,
+    "notes": "每条规则独立执行，权限不足、目标缺失或写入异常会记录问题并继续其余产品。全部结束后分别返回可复制的消耗日报与执行结果，失败产品和原因只列在执行结果。日报沿用消耗总览、Top3、波动和停投预警格式；只统计本轮大盘已确认的消耗值，覆盖不完整时注明部分统计。部分项目完成时显示部分完成，已确认的部分写入保留审计。本轮消耗失败产品不刷新其大盘记录；大盘或日期尚未确认时不复用历史日报。共享规则或来源不可读取时，结束依赖步骤并返回原因。默认关闭审计中转。"
+  }
+}

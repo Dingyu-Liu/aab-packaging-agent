@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "website-generator",
+  "name": "官网与隐私",
+  "version": "0.1.0",
+  "kind": "website",
+  "description": "根据已有官网、隐私链接或关键词描述，一键生成相互跳转的官网与隐私页静态工程。",
+  "status": "ready",
+  "tags": ["website", "privacy", "static-site"],
+  "profiles": []
+}

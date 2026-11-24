@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "platform": "mac-intel",
+  "deploy": {
+    "parts": [
+      "deploy-01.part",
+      "deploy-02.part",
+      "deploy-03.part",
+      "deploy-04.part",
+      "deploy-05.part",
+      "deploy-06.part"
+    ],
+    "sha256": "4a25dd018642fc34ab2886cc7dae606f192cc5b08f6baed7552c8f6cf1293568",
+    "directory": "deploy"
+  },
+  "firebase": {
+    "parts": [
+      "Firebase.zip"
+    ],
+    "sha256": "60571c5bf76918cb15d402026eb73332dc50c866d39edb74bc375a94c7f380e6",
+    "directory": "m2repository"
+  }
+}
