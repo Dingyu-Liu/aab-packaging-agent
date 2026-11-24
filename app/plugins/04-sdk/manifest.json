@@ -5,7 +5,7 @@
   "version": "1.0.0",
   "kind": "sdk",
   "status": "ready",
-  "description": "04 合作方 SDK 接入（Xcode 原生工程）。",
+  "description": "面向 iOS 工程，接入 PA / PAKit、Adjust 与跟踪授权，配置业务事件上报。",
   "tags": [
     "SDK",
     "04",
@@ -18,7 +18,7 @@
       "name": "04SDK 接入 · iOS",
       "version": "1.0.0",
       "platform": "ios",
-      "description": "04 合作方 SDK 接入；流程与 01 大致相同，工程为 Xcode 原生工程（非 Unity）。",
+      "description": "接入 PA / PAKit 与 Adjust，将合作方业务事件对应到归因平台，并处理 iOS 跟踪授权。",
       "attribution": "custom",
       "skill": {
         "path": "skills/24ios-sdk-integration/SKILL.md",

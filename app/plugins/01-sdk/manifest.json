@@ -4,7 +4,7 @@
   "name": "01SDK 接入",
   "version": "0.1.0",
   "kind": "sdk",
-  "description": "为 Unity iOS 项目接入归因、入口接口和 H5 流程，支持 AppsFlyer 方案。",
+  "description": "面向 Unity iOS / Xcode 工程，接入 AppsFlyer、入口接口与内嵌网页。",
   "status": "ready",
   "tags": [
     "SDK",
@@ -20,7 +20,7 @@
       "name": "01 · iOS · AppsFlyer",
       "version": "2026.11.06.1",
       "platform": "ios",
-      "description": "接入 AppsFlyer 归因、入口接口与 H5 事件，可按需配置 Facebook 和 ATT。",
+      "description": "把归因统计、入口接口和内嵌 H5 网页接入游戏，衔接网页与游戏画面的切换。",
       "attribution": "appsflyer",
       "skill": {
         "path": "skills/01sdk-integration/SKILL.md",

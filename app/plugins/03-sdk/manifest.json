@@ -5,7 +5,7 @@
   "version": "1.0.0",
   "kind": "sdk",
   "status": "ready",
-  "description": "03 合作方 SDK 接入（Xcode 原生工程）。",
+  "description": "面向 iOS 工程，接入 PA 类 SDK 与 AppsFlyer，处理加载、网页恢复和音视频切换。",
   "tags": [
     "SDK",
     "03",
@@ -18,7 +18,7 @@
       "name": "03SDK 接入 · iOS",
       "version": "2026.11.12.1",
       "platform": "ios",
-      "description": "03 合作方 SDK 接入；流程与 01 大致相同，工程为 Xcode 原生工程（非 Unity）。",
+      "description": "接入 PA 类 SDK 与 AppsFlyer，完善启动加载、网页失败恢复，以及游戏音视频的暂停和恢复。",
       "attribution": "custom",
       "skill": {
         "path": "skills/03sdk-integration/SKILL.md",

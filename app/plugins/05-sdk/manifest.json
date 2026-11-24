@@ -5,7 +5,7 @@
   "version": "1.0.0",
   "kind": "sdk",
   "status": "ready",
-  "description": "05 合作方 SDK 接入（iOS Xcode 与 Android 原生工程）。",
+  "description": "提供 iOS 和 Android 两种方案，接入 PA / PAKit 与 Adjust，并辅助测试交付。",
   "tags": [
     "SDK",
     "05",
@@ -19,7 +19,7 @@
       "name": "05SDK 接入 · iOS",
       "version": "2026.11.06.1",
       "platform": "ios",
-      "description": "05 合作方 SDK 接入；流程与 01 大致相同，工程为 Xcode 原生工程（非 Unity）。",
+      "description": "接入 PA / PAKit、Adjust 与 ATT，处理加载画面和安全区域，并辅助真机测试交付。",
       "attribution": "custom",
       "skill": {
         "path": "skills/05ios-sdk-integration/SKILL.md",
@@ -33,7 +33,7 @@
       "name": "05SDK 接入 · Android",
       "version": "2026.11.06.1",
       "platform": "android",
-      "description": "05 合作方 SDK 接入；流程与 01 大致相同，工程为 Android 原生工程（非 Unity）。",
+      "description": "通过 Maven 接入 PA / PAKit 与 Adjust，合并生命周期、依赖和业务事件映射。",
       "attribution": "custom",
       "skill": {
         "path": "skills/05gp-sdk-integration/SKILL.md",

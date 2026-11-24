@@ -1,0 +1,115 @@
+{
+  "partners": {
+    "01": "面向 Unity iOS / Xcode 工程，接入 AppsFlyer、入口接口与内嵌网页。",
+    "02": "面向 Android 工程，接入 PA SDK、AppsFlyer 与广告标识，检查启动和网页流程。",
+    "03": "面向 iOS 工程，接入 PA 类 SDK 与 AppsFlyer，处理加载、网页恢复和音视频切换。",
+    "04": "面向 iOS 工程，接入 PA / PAKit、Adjust 与跟踪授权，配置业务事件上报。",
+    "05": "提供 iOS 和 Android 两种方案，接入 PA / PAKit 与 Adjust，并辅助测试交付。"
+  },
+  "profiles": {
+    "01-sdk/01-ios-af": {
+      "partner": "01",
+      "title": "01 · Unity iOS / AppsFlyer",
+      "summary": "把归因统计、入口接口和内嵌 H5 网页接入游戏，衔接网页与游戏画面的切换。",
+      "project": "Unity iOS 工程或对应的 Xcode 导出工程。当前内置方案为 iOS + AppsFlyer。",
+      "features": [
+        "AppsFlyer 归因",
+        "H5 / WebView",
+        "横竖屏切换",
+        "可选 Facebook / ATT"
+      ],
+      "output": "接入后的 iOS 工程与验证记录；iOS 构建需要 Xcode，不生成 AAB。",
+      "materials": "完整工程、合作方接入文档与入口配置、自己的 AppsFlyer 参数；真机测试需 iOS 签名。"
+    },
+    "02-sdk/02-android": {
+      "partner": "02",
+      "title": "02 · Android / AppsFlyer",
+      "summary": "接入合作方 PA SDK、AppsFlyer 和 GAID 广告标识，处理启动、网页显示与方向恢复。",
+      "project": "包含 Gradle 配置的 Android / Android Studio 工程根目录。",
+      "features": [
+        "PA SDK",
+        "AppsFlyer 归因",
+        "GAID 广告标识",
+        "网页与方向恢复"
+      ],
+      "output": "接入工程及独立测试 APK；如需正式 AAB，需明确提出并准备原签名。",
+      "materials": "完整工程、合作方 SDK / Demo / 文档、自己的归因参数，以及项目需要的 Android 工具链。"
+    },
+    "03-sdk/03-ios": {
+      "partner": "03",
+      "title": "03 · iOS / AppsFlyer",
+      "summary": "接入 PA 类 SDK 与 AppsFlyer，完善启动加载、网页失败恢复，以及游戏音视频的暂停和恢复。",
+      "project": "可由 Xcode 打开的 iOS 工程（.xcodeproj 或 .xcworkspace）。",
+      "features": [
+        "PA 类 SDK",
+        "AppsFlyer 归因",
+        "加载与网页恢复",
+        "音视频暂停 / 恢复"
+      ],
+      "output": "接入后的 iOS 工程，可按需求辅助生成和安装真机测试包；不生成 AAB。",
+      "materials": "完整工程、对应 SDK / Demo / 文档、自己的 AppsFlyer 参数；真机测试需证书、描述文件和设备。"
+    },
+    "04-sdk/04-ios": {
+      "partner": "04",
+      "title": "04 · iOS / Adjust",
+      "summary": "接入 PA / PAKit 与 Adjust，将合作方业务事件对应到归因平台，并处理 iOS 跟踪授权。",
+      "project": "可由 Xcode 打开的 iOS 工程（.xcodeproj 或 .xcworkspace）。",
+      "features": [
+        "PA / PAKit",
+        "Adjust 事件映射",
+        "ATT 跟踪授权",
+        "加载与安全区域"
+      ],
+      "output": "接入后的 iOS 工程及正式 / 测试配置检查；不生成 AAB。",
+      "materials": "完整工程、对应 SDK / Demo / 文档、自己的 Adjust App Token 与事件配置，以及所需 iOS 签名。"
+    },
+    "05-sdk/05-ios": {
+      "partner": "05",
+      "title": "05 · iOS / Adjust",
+      "summary": "接入 PA / PAKit、Adjust 与 ATT，处理加载画面和安全区域，并辅助真机测试交付。",
+      "project": "可由 Xcode 打开的 iOS 工程（.xcodeproj 或 .xcworkspace）。",
+      "features": [
+        "PA / PAKit",
+        "Adjust 归因",
+        "ATT / 安全区域",
+        "真机测试辅助"
+      ],
+      "output": "接入后的 iOS 工程，可按需求提供测试构建、安装或自包含 .command 工具；不生成 AAB。",
+      "materials": "完整工程、对应 SDK / Demo / 文档、自己的 Adjust 参数；测试构建需 iOS 签名与设备。"
+    },
+    "05-sdk/05-android": {
+      "partner": "05",
+      "title": "05 · Android / Adjust",
+      "summary": "通过 Maven 接入 PA / PAKit 与 Adjust，合并生命周期、依赖和业务事件映射。",
+      "project": "包含 Gradle 配置的 Android / Android Studio 工程根目录。",
+      "features": [
+        "PA / PAKit Maven SDK",
+        "Adjust 归因",
+        "生命周期合并",
+        "业务事件映射"
+      ],
+      "output": "接入工程及独立测试 APK；正式 AAB 需明确提出并使用原签名。",
+      "materials": "完整工程、合作方 Maven / SDK 接入资料、自己的 Adjust 参数；正式打包需原签名和 Android 工具链。"
+    }
+  },
+  "guidance": "01–05 是合作方编号，不代表版本高低。SDK 已接入、只需生成 Android AAB 时，可直接使用“GP打包”。",
+  "requirements": "接入时请提供对应合作方的资料和自己的配置，实际构建取决于工程、依赖、工具链与签名是否齐备。",
+  "terms": [
+    [
+      "AppsFlyer / Adjust",
+      "识别用户来自哪条广告，并上报相关事件的归因服务。"
+    ],
+    [
+      "PA / PAKit",
+      "合作方业务 SDK，具体能力以该合作方的版本和文档为准。"
+    ],
+    [
+      "WebView / H5",
+      "在应用里显示网页的界面。"
+    ],
+    [
+      "ATT / GAID",
+      "ATT 是 iOS 跟踪授权；GAID 是 Android 的 Google 广告标识。"
+    ]
+  ]
+}

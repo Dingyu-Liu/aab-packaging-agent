@@ -1,8 +1,8 @@
 {
   "application": "AAB助手",
-  "version": "0.1.21-public-navy-docs1",
+  "version": "0.1.21-public-navy-sdk-intros",
   "archive": "AAB-Assistant-macOS.zip",
-  "archiveSHA256": "926dc0627d895dc8d116dcf7d41700e0217970b81ba55ed3fa044fb9d154ad20",
+  "archiveSHA256": "5fb7ddcf2e5a148f97375148670d2f46a8cbda1e0d4ca0411ea9b430729458be",
   "files": [
     {
       "path": "AAB助手.app/Contents/Frameworks/Electron Framework.framework/Electron Framework",
@@ -1368,7 +1368,7 @@
     {
       "path": "AAB助手.app/Contents/MacOS/Partner Agent",
       "bytes": 31488,
-      "sha256": "598b3b14b6ae862392fc531dca78f6428cc6cb29f8753f6ac70b89b9b22f2d28"
+      "sha256": "bc78127a9f4feeed364c7a85e218322aa7303d7b029d018ad56844658c150d5b"
     },
     {
       "path": "AAB助手.app/Contents/PkgInfo",
@@ -1377,8 +1377,8 @@
     },
     {
       "path": "AAB助手.app/Contents/Resources/README.md",
-      "bytes": 6634,
-      "sha256": "ddd2ded29336ae833affb39d983009dd084b96af9b933903081d918ce1096dca"
+      "bytes": 6945,
+      "sha256": "e22ac614ac364a464fa77855c52e0c64a0825facb8ee7121da6542463788a335"
     },
     {
       "path": "AAB助手.app/Contents/Resources/THIRD_PARTY_NOTICES.md",
@@ -1432,8 +1432,8 @@
     },
     {
       "path": "AAB助手.app/Contents/Resources/app/dist/assets/index-CiI5dBOH.js",
-      "bytes": 493537,
-      "sha256": "0242ff8b6c70205e11f1ad1fb3fd55eaf250331c1d1685568fed022833b65fde"
+      "bytes": 511308,
+      "sha256": "2d2657d180261a6a26e70bbafcffc3c93e76c811ea260e312f5954060f93081a"
     },
     {
       "path": "AAB助手.app/Contents/Resources/app/dist/assets/index-DH4QYEZ7.css",
@@ -1442,8 +1442,8 @@
     },
     {
       "path": "AAB助手.app/Contents/Resources/app/dist/assets/navy-horizontal.css",
-      "bytes": 14349,
-      "sha256": "9e74607ff4f43373a6624fc1c449121808e8a4ae4738c58677e483574125f3a1"
+      "bytes": 16759,
+      "sha256": "27bf3b9df841755f24c4a112222fbe31289303adcc8986ca4355efcbff6b5855"
     },
     {
       "path": "AAB助手.app/Contents/Resources/app/dist/index.html",
@@ -2052,8 +2052,8 @@
     },
     {
       "path": "AAB助手.app/Contents/Resources/app/plugins/01-sdk/manifest.json",
-      "bytes": 800,
-      "sha256": "10591cd92124390a5b6f29ead024304fa72654bdda81ad5a6c692c547a648782"
+      "bytes": 808,
+      "sha256": "669febab8421b2fef145c4bf36da7321850e486a467402a96ab0760838470f03"
     },
     {
       "path": "AAB助手.app/Contents/Resources/app/plugins/01-sdk/skills/01sdk-integration/SKILL.md",
@@ -2162,8 +2162,8 @@
     },
     {
       "path": "AAB助手.app/Contents/Resources/app/plugins/02-sdk/manifest.json",
-      "bytes": 743,
-      "sha256": "e26c8df1aa734b782ec4ddede5f598be96f19bf8f4be27524b9ff4c5cc721dbc"
+      "bytes": 784,
+      "sha256": "84c37a465cc7d2e7a660729e64073533e9262393c53bbbbc313690666dbeb4e7"
     },
     {
       "path": "AAB助手.app/Contents/Resources/app/plugins/02-sdk/skills/02gp-sdk-integration/SKILL.md",
@@ -2217,8 +2217,8 @@
     },
     {
       "path": "AAB助手.app/Contents/Resources/app/plugins/03-sdk/manifest.json",
-      "bytes": 713,
-      "sha256": "6c085ca468b83a1ae8081231d6d08cfce0ae41c37a1cc07f6ed9c904adbfdc4e"
+      "bytes": 783,
+      "sha256": "f7030d146610cfb87d20764e9587f53e919891aa08b12a18f25671cefb4cd6d6"
     },
     {
       "path": "AAB助手.app/Contents/Resources/app/plugins/03-sdk/skills/03sdk-integration/SKILL.md",
@@ -2277,8 +2277,8 @@
     },
     {
       "path": "AAB助手.app/Contents/Resources/app/plugins/04-sdk/manifest.json",
-      "bytes": 703,
-      "sha256": "8c55ab5eaa1473aad8e7cf32a21297697964c27c6038b689d90b3d5c028d233c"
+      "bytes": 753,
+      "sha256": "ec0aa1cf8b3477c4758ad59e6f4b8656d28f057c0cec9834daec6df88c567944"
     },
     {
       "path": "AAB助手.app/Contents/Resources/app/plugins/04-sdk/skills/24ios-sdk-integration/SKILL.md",
@@ -2387,8 +2387,8 @@
     },
     {
       "path": "AAB助手.app/Contents/Resources/app/plugins/05-sdk/manifest.json",
-      "bytes": 1210,
-      "sha256": "ec8c9074a70f60ff3257543d2c2a149e6494ce50f336916310dc3f435ff0763f"
+      "bytes": 1233,
+      "sha256": "433e5586a9d72a86ae252e71075a06cae97ec7459392b28c39feef32eda3c356"
     },
     {
       "path": "AAB助手.app/Contents/Resources/app/plugins/05-sdk/skills/05gp-sdk-integration/SKILL.md",
@@ -3081,6 +3081,11 @@
       "sha256": "c8729471a390530aef9b80c13b4af22ffca9aba297c62f90ec9edb6f01bc1fad"
     },
     {
+      "path": "AAB助手.app/Contents/Resources/app/shared/sdk-module-introductions.json",
+      "bytes": 5546,
+      "sha256": "86dc3bbac49422b4d7458a42e7e7420cad652b7b7edc96c5cb8f2cd30fd0ac82"
+    },
+    {
       "path": "AAB助手.app/Contents/Resources/app/shared/sdk-partners.js",
       "bytes": 80,
       "sha256": "11f2b8a1484ed23f9f690f6d44a552b976ccbf3241354c6f14707442e6ce56aa"
@@ -3152,13 +3157,13 @@
     },
     {
       "path": "AAB助手.app/Contents/Resources/使用教程.md",
-      "bytes": 8661,
-      "sha256": "43270ac114f9ee852bd3aa77826b47270712437ca5880b4059b40ad22198359c"
+      "bytes": 10428,
+      "sha256": "73594baefe7099b7852a4906a33d1129f55e524639a38855f33754689a061748"
     },
     {
       "path": "AAB助手.app/Contents/Resources/安装说明.md",
-      "bytes": 8661,
-      "sha256": "43270ac114f9ee852bd3aa77826b47270712437ca5880b4059b40ad22198359c"
+      "bytes": 10428,
+      "sha256": "73594baefe7099b7852a4906a33d1129f55e524639a38855f33754689a061748"
     },
     {
       "path": "AAB助手.app/Contents/Resources/软件搭建与实现简介.md",
@@ -3167,13 +3172,13 @@
     },
     {
       "path": "AAB助手.app/Contents/_CodeSignature/CodeResources",
-      "bytes": 115252,
-      "sha256": "fa68ea4b97ff6c21c9f6dbb299b8e1bf74b94078df8846e8b2333afdb8938920"
+      "bytes": 115538,
+      "sha256": "158349d4dc2eec2f1c03048d3e75e8e72217f0b8233c29c63f0a6e5526dfd22f"
     },
     {
       "path": "README.md",
-      "bytes": 6634,
-      "sha256": "ddd2ded29336ae833affb39d983009dd084b96af9b933903081d918ce1096dca"
+      "bytes": 6945,
+      "sha256": "e22ac614ac364a464fa77855c52e0c64a0825facb8ee7121da6542463788a335"
     },
     {
       "path": "partner-agent-fix.sh",
@@ -3182,8 +3187,8 @@
     },
     {
       "path": "使用教程.md",
-      "bytes": 8661,
-      "sha256": "43270ac114f9ee852bd3aa77826b47270712437ca5880b4059b40ad22198359c"
+      "bytes": 10428,
+      "sha256": "73594baefe7099b7852a4906a33d1129f55e524639a38855f33754689a061748"
     },
     {
       "path": "修复 AAB助手 启动.app/Contents/Info.plist",

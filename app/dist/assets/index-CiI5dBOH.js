@@ -11,7 +11,645 @@ Error generating stack: `+e.message+`
 `},{label:`排查问题`,prompt:`帮我分析这个问题，找出原因并给出修复方案：
 `},{label:`实现功能`,prompt:`帮我实现以下功能，并验证结果：
 `}],si=new Map;function ci(e){let t=si.get(e);if(t!==void 0)return t;try{return sessionStorage.getItem(e)??``}catch{return``}}function li(e,t){si.set(e,t);try{t?sessionStorage.setItem(e,t):sessionStorage.removeItem(e)}catch{}}function ui({taskId:e,task:t,isNew:n,active:r,settings:i,navigate:a,onUpdateTask:o,notify:s,refreshGeneration:c,embeddedSdk:l=!1}){let[u,d]=(0,D.useState)(!(!e||t)),[f,p]=(0,D.useState)(``),[m,h]=(0,D.useState)(!1),[g,_]=(0,D.useState)(``),[v,y]=(0,D.useState)(null),[b,x]=(0,D.useState)(0),[S,C]=(0,D.useState)(null),[w,T]=(0,D.useState)(`all`),[E,O]=(0,D.useState)(``),k=gr(),A=k?.role!==`member`,j=_r(`partner-agent.task-draft.${e??`new`}`,k?.id),[M,N]=(0,D.useState)(()=>ci(j)),P=(0,D.useRef)(!0),F=(0,D.useRef)(!1),I=(0,D.useRef)(null),L=(0,D.useRef)(null),R=(0,D.useRef)(null),z=(0,D.useRef)(!0),B=(0,D.useId)(),te=Zn(i),re=t?.mode===`chat`,ie=t?Xn(t.status):!1,ae=!!(t&&(t.mode===`execute`||re&&t.workspacePath)),V=te&&(!ie||l)&&!m&&!f&&(n||ae),oe=S??(re||l?`task`:`activity`),ce=t?.messages.at(-1);(0,D.useEffect)(()=>(P.current=!0,()=>{P.current=!1}),[]),(0,D.useEffect)(()=>{if(!r||n||!e||F.current)return;let t=!1,i,a=new AbortController;I.current=a,d(!0),p(``),h(!1);async function s(){if(!(t||a.signal.aborted))try{let n=await q.task(e,a.signal);if(t||a.signal.aborted)return;o(n),p(``),Xn(n.status)&&(i=setTimeout(()=>void s(),1500))}catch(e){if(t||a.signal.aborted||Kn(e))return;p(J(e)),e instanceof Hn&&e.status===404?h(!0):i=setTimeout(()=>void s(),5e3)}finally{t||d(!1)}}return s(),()=>{t=!0,a.abort(),i&&clearTimeout(i)}},[r,n,e,o,b,c,ie]),(0,D.useEffect)(()=>{L.current&&(L.current.style.height=`auto`,L.current.style.height=`${Math.min(L.current.scrollHeight,240)}px`)},[M,oe]),(0,D.useEffect)(()=>{n&&r&&L.current?.focus()},[n,r]),(0,D.useEffect)(()=>{oe===`task`&&z.current&&R.current&&(R.current.scrollTop=R.current.scrollHeight)},[t?.messages.length,ce?.content,oe,ie]);function H(e){li(j,e),N(e)}function U(e){return!F.current&&(F.current=!0,I.current?.abort(),y(e),_(``),!0)}function le(){F.current=!1,P.current&&(y(null),x(e=>e+1))}async function ue(e,t,n){if(U(e))try{let e=await t();return o(e),n&&s(n),e}catch(e){P.current?_(J(e)):s(J(e),`error`);return}finally{le()}}async function de(){if(t&&U(`workspace`))try{if(!(await q.openWorkspace(t.id)).ok)throw Error(`无法打开工作目录。`);s(`已打开工作目录。`)}catch(e){P.current?_(J(e)):s(J(e),`error`)}finally{le()}}async function fe(){let t=M.trim();if(t&&V&&U(`message`))try{let r;if(l&&ie&&e){await q.cancelTask(e);for(let n=0;n<80;n++){let n=await q.task(e);if(o(n),!Xn(n.status))try{r=await q.sendMessage(e,t);break}catch(e){if(!(e instanceof Hn)||e.status!==409||!/当前步骤|运行中的任务/.test(e.message))throw e}await new Promise(e=>setTimeout(e,250))}if(!r)throw Error(`当前操作仍在停止，请稍后再次发送。补充内容已保留。`)}else r=n?await q.createTask({pluginId:`assistant`,mode:`chat`,parameters:{},prompt:t}):await q.sendMessage(e,t);ci(j)===M&&(li(j,``),P.current&&N(``));let i=P.current;o(r),n&&i&&a(`tasks`,r.id),z.current=!0}catch(e){P.current?_(J(e)):s(J(e),`error`)}finally{le()}}let W=(0,Y.jsxs)(`div`,{className:`tw-composer-wrap`,children:[!n&&!ae?(0,Y.jsxs)(`div`,{className:`tw-composer-notice`,children:[(0,Y.jsx)(`span`,{children:`此任务仅支持查看记录。`}),(0,Y.jsxs)(`button`,{className:`inline-link`,onClick:()=>a(`tasks`,`new`),children:[`新建任务`,(0,Y.jsx)(ee,{size:12})]})]}):te?null:(0,Y.jsxs)(`div`,{className:`tw-composer-notice`,children:[(0,Y.jsx)(un,{size:14}),(0,Y.jsx)(`span`,{children:A?`配置 API 后即可发送。`:`请联系管理员配置本机模型连接。`}),A&&(0,Y.jsxs)(`button`,{className:`inline-link`,onClick:()=>a(`settings`),children:[`去设置`,(0,Y.jsx)(ee,{size:12})]})]}),(0,Y.jsxs)(`form`,{className:`tw-composer${v===`message`?` tw-sending`:``}`,onSubmit:e=>{e.preventDefault(),fe()},children:[(0,Y.jsx)(`textarea`,{ref:L,rows:n?4:3,value:M,maxLength:3e4,onChange:e=>H(e.target.value),disabled:v===`message`||!n&&!ae,placeholder:n?`描述你的需求，或贴上需要处理的内容…`:ae?l?`补充需求、描述遇到的问题，或告诉 AI 下一步要做什么…`:`继续补充需求…`:`此任务不可继续发送`,"aria-label":n?`任务需求`:`继续任务`,onKeyDown:e=>{e.key===`Enter`&&!e.shiftKey&&!e.nativeEvent.isComposing&&e.keyCode!==229&&(e.preventDefault(),fe())}}),(0,Y.jsxs)(`div`,{className:`tw-composer-footer`,children:[(0,Y.jsx)(`span`,{className:`tw-shortcut`,children:`Enter 发送 · Shift + Enter 换行`}),(0,Y.jsx)(X,{className:`tw-send${l&&ie?` sdk-send-interrupt`:``}`,type:`submit`,variant:`primary`,icon:ne,loading:v===`message`,disabled:!V||!M.trim()||v!==null,"aria-label":n?`发送需求`:l&&ie?`停止并发送`:`发送消息`,"aria-keyshortcuts":`Enter`,title:l&&ie?`停止当前步骤并发送补充需求`:`发送`,children:l&&ie?`停止并发送`:null})]})]})]});if(n)return(0,Y.jsx)(`main`,{className:`tw-detail tw-new`,"aria-label":`新建任务`,children:(0,Y.jsxs)(`div`,{className:`tw-new-content`,children:[(0,Y.jsx)(`span`,{className:`tw-new-symbol`,"aria-hidden":`true`,children:(0,Y.jsx)(vn,{size:25,strokeWidth:1.5})}),(0,Y.jsx)(`h2`,{children:`有什么需要完成？`}),g&&(0,Y.jsx)(Z,{tone:`error`,children:g}),W,(0,Y.jsx)(`div`,{className:`tw-suggestions`,children:!M.trim()&&oi.map(e=>(0,Y.jsxs)(`button`,{onClick:()=>{H(e.prompt),L.current?.focus()},children:[e.label,(0,Y.jsx)(ee,{size:12})]},e.label))})]})});if(!t||m)return(0,Y.jsx)(`main`,{className:`tw-detail tw-unavailable`,children:u?(0,Y.jsx)(ur,{label:`正在读取任务…`}):(0,Y.jsxs)(Y.Fragment,{children:[f&&(0,Y.jsx)(Z,{tone:`error`,children:f}),(0,Y.jsxs)(cr,{icon:vn,title:m?`未找到任务`:`暂时无法读取任务`,description:``,children:[(0,Y.jsx)(X,{icon:Yt,onClick:()=>x(e=>e+1),children:`重试`}),(0,Y.jsx)(X,{icon:Gt,variant:`primary`,onClick:()=>a(`tasks`,`new`),children:`新建任务`})]})]})});let G=t.permissions.filter(e=>e.status===`pending`),me=t.permissions.filter(e=>e.status!==`pending`),he=t.events.filter(e=>(w===`all`||e.kind===w||w===`issues`&&(e.level===`warn`||e.level===`error`))&&`${e.message} ${e.detail||``}`.toLowerCase().includes(E.trim().toLowerCase())),ge=t.status===`failed`?t.events.findLast(e=>e.level===`error`)?.message||t.phase:``,_e=t.status===`needs_configuration`&&t.unityPreparation&&t.unityPreparation.status!==`ready`?t.unityPreparation:void 0,ve=t.status===`needs_review`?t.events.findLast(e=>e.level===`warn`)?.message||t.phase:``,be=ii.map(e=>t.artifacts.find(t=>t.name===e&&t.type!==`directory`)).find(Boolean)??t.artifacts.find(e=>e.type===`report`&&e.name!==`component-lock.json`),xe=[...re||t.mode===`execute`||t.messages.length?[{key:`task`,label:l?`对话`:`任务`,icon:vn}]:[],{key:`activity`,label:`执行记录`,icon:En},{key:`artifacts`,label:`文件`,icon:$e},...t.report?[{key:`inspection`,label:`工程报告`,icon:Ct}]:[]],Se=xe.some(e=>e.key===oe)?oe:`activity`;return(0,Y.jsxs)(`main`,{className:`tw-detail`,"aria-label":`任务详情`,children:[(0,Y.jsxs)(`header`,{className:`tw-task-heading`,children:[(0,Y.jsxs)(`div`,{className:`tw-task-title`,children:[(0,Y.jsx)(`h2`,{children:l?`AI 接入对话`:t.name}),(0,Y.jsx)(or,{status:t.status})]}),(0,Y.jsxs)(`div`,{className:`tw-task-meta`,children:[(0,Y.jsx)(`span`,{children:Yn[t.mode]}),(0,Y.jsxs)(`time`,{dateTime:t.createdAt,children:[(0,Y.jsx)(Ce,{size:12}),Qn(t.createdAt)]}),(0,Y.jsxs)(`div`,{className:`tw-task-actions`,children:[be&&(0,Y.jsxs)(`a`,{className:`button button-ghost button-compact`,href:q.artifactUrl(t.id,be.id),download:!0,children:[(0,Y.jsx)(Fe,{size:14}),`报告`]}),t.workspacePath&&(0,Y.jsx)(X,{compact:!0,variant:`ghost`,icon:rt,loading:v===`workspace`,disabled:v!==null,onClick:()=>void de(),children:`工作目录`}),ie&&(0,Y.jsx)(X,{compact:!0,variant:`danger`,icon:bn,loading:v===`cancel`,disabled:v!==null,onClick:()=>void ue(`cancel`,()=>q.cancelTask(t.id),`已提交取消请求。`),children:`停止`})]})]})]}),(f||g||ge||ve||t.status===`needs_configuration`)&&(0,Y.jsxs)(`div`,{className:`tw-notices`,children:[f&&(0,Y.jsxs)(Z,{tone:`error`,title:`更新失败`,children:[f,(0,Y.jsx)(`button`,{className:`inline-link`,onClick:()=>x(e=>e+1),children:`重试`})]}),g&&(0,Y.jsx)(Z,{tone:`error`,children:g}),ge&&(0,Y.jsx)(Z,{tone:`error`,title:`执行失败`,children:ge}),ve&&(0,Y.jsx)(Z,{tone:`warning`,title:`待核对`,children:ve}),_e&&(0,Y.jsxs)(Z,{tone:`warning`,title:_e.status===`waiting_installation`?`请安装所需 Unity`:`请处理 Unity 环境后重新扫描`,children:[(0,Y.jsx)(`p`,{children:Qr({unityVersion:_e.version,unityRevision:_e.revision,unityDistribution:_e.distribution},_e.platform)}),(0,Y.jsx)(`p`,{style:{whiteSpace:`pre-line`},children:_e.workflowVersion===2?_e.detail:`请自行安装工程要求的 Unity 编辑器和平台模块，确认后将按当前流程重新扫描。`}),(0,Y.jsx)(`div`,{className:`form-actions`,children:(0,Y.jsx)(X,{compact:!0,icon:Yt,loading:v===`confirm-unity`,disabled:v!==null||!te,onClick:()=>void ue(`confirm-unity`,()=>q.confirmUnityPreparation(t.id),`正在重新扫描 Unity 环境，通过后将继续接入。`),children:_e.status===`waiting_installation`?`已安装，确认并重新扫描`:`确认并重新扫描`})})]}),t.status===`needs_configuration`&&!_e&&(0,Y.jsxs)(Z,{tone:`warning`,title:`待配置`,children:[re?te?`配置已更新，可以继续任务。`:`请配置模型 API。`:t.phase,A&&(0,Y.jsxs)(`button`,{className:`inline-link`,onClick:()=>a(`settings`),children:[`设置`,(0,Y.jsx)(ee,{size:12})]})]})]}),G.length>0&&(0,Y.jsxs)(`section`,{className:`tw-permissions`,"aria-label":`待处理权限`,children:[(0,Y.jsxs)(`h3`,{children:[(0,Y.jsx)(Dt,{size:16}),`需要授权`,(0,Y.jsx)(`span`,{children:G.length})]}),G.map(e=>(0,Y.jsxs)(`div`,{className:`tw-permission`,children:[(0,Y.jsx)(`strong`,{children:e.permission}),(0,Y.jsx)(`div`,{className:`tw-permission-patterns`,children:e.patterns.length?e.patterns.map((e,t)=>(0,Y.jsx)(`code`,{children:e},`${e}-${t}`)):(0,Y.jsx)(`span`,{children:`未提供权限范围`})}),(0,Y.jsxs)(`div`,{className:`tw-permission-actions`,children:[(0,Y.jsx)(X,{compact:!0,variant:`primary`,loading:v===`once-${e.id}`,disabled:v!==null,onClick:()=>void ue(`once-${e.id}`,()=>q.permission(t.id,e.id,`once`)),children:`允许本次`}),(0,Y.jsx)(X,{compact:!0,loading:v===`always-${e.id}`,disabled:v!==null,onClick:()=>void ue(`always-${e.id}`,()=>q.permission(t.id,e.id,`always`)),children:`允许此范围`}),(0,Y.jsx)(X,{compact:!0,variant:`ghost`,icon:Bn,loading:v===`reject-${e.id}`,disabled:v!==null,onClick:()=>void ue(`reject-${e.id}`,()=>q.permission(t.id,e.id,`reject`)),children:`拒绝`})]})]},e.id))]}),t.projectPath&&(0,Y.jsxs)(`details`,{className:`tw-project`,children:[(0,Y.jsxs)(`summary`,{children:[(0,Y.jsx)(rt,{size:14}),(0,Y.jsx)(`span`,{children:er(t.projectPath)}),(0,Y.jsx)(pe,{size:13})]}),(0,Y.jsxs)(`dl`,{children:[(0,Y.jsx)(`dt`,{children:`原始工程`}),(0,Y.jsx)(`dd`,{children:(0,Y.jsx)(`code`,{children:t.projectPath})}),(0,Y.jsx)(`dt`,{children:`工作副本`}),(0,Y.jsx)(`dd`,{children:(0,Y.jsx)(`code`,{children:t.workspacePath||`未创建`})}),(0,Y.jsx)(`dt`,{children:`组件版本`}),(0,Y.jsxs)(`dd`,{children:[`v`,t.pluginVersion,t.skillVersion?` · Skill v${t.skillVersion}`:``]})]})]}),!re&&(0,Y.jsxs)(`details`,{className:`tw-project tw-component-lock`,children:[(0,Y.jsxs)(`summary`,{children:[(0,Y.jsx)(fn,{size:14}),(0,Y.jsxs)(`span`,{children:[`冻结组件 · v`,t.pluginVersion]}),(0,Y.jsx)(pe,{size:13})]}),(0,Y.jsxs)(`dl`,{children:[(0,Y.jsx)(`dt`,{children:`模块版本`}),(0,Y.jsx)(`dd`,{children:(0,Y.jsxs)(`code`,{children:[t.pluginId,`@`,t.pluginVersion]})}),t.skillVersion&&(0,Y.jsxs)(Y.Fragment,{children:[(0,Y.jsx)(`dt`,{children:`Skill 版本`}),(0,Y.jsx)(`dd`,{children:(0,Y.jsx)(`code`,{children:t.skillVersion})})]}),(0,Y.jsx)(`dt`,{children:`包来源`}),(0,Y.jsx)(`dd`,{children:t.packageSource===`registry`?`技能包仓库`:t.packageSource===`local`?`本地发布`:t.packageSource===`builtin`?`App 内置`:`创建时未记录`}),t.packSha256&&(0,Y.jsxs)(Y.Fragment,{children:[(0,Y.jsx)(`dt`,{children:`包 SHA-256`}),(0,Y.jsx)(`dd`,{children:(0,Y.jsx)(`code`,{children:t.packSha256})})]}),t.releaseId&&(0,Y.jsxs)(Y.Fragment,{children:[(0,Y.jsx)(`dt`,{children:`Release ID`}),(0,Y.jsx)(`dd`,{children:(0,Y.jsx)(`code`,{children:t.releaseId})})]})]}),(0,Y.jsx)(`p`,{children:`任务使用创建时冻结的组件。后续安装、升级或回滚不会改变此任务的版本和文件。`})]}),!ie&&(0,Y.jsx)(ni,{task:t},t.id),(0,Y.jsx)(`div`,{className:`tw-tabs`,role:`tablist`,"aria-label":`任务内容`,onKeyDown:e=>{let t=xe.findIndex(e=>e.key===Se),n=e.key===`ArrowRight`?(t+1)%xe.length:e.key===`ArrowLeft`?(t-1+xe.length)%xe.length:e.key===`Home`?0:e.key===`End`?xe.length-1:-1;n<0||(e.preventDefault(),C(xe[n].key),z.current=!0,e.currentTarget.querySelectorAll(`[role="tab"]`)[n]?.focus())},children:xe.map(({key:e,label:n,icon:r})=>(0,Y.jsxs)(`button`,{id:`${B}-${e}`,role:`tab`,"aria-selected":Se===e,"aria-controls":`${B}-panel`,tabIndex:Se===e?0:-1,onClick:()=>{C(e),z.current=!0},children:[(0,Y.jsx)(r,{size:15}),n,e===`artifacts`&&t.artifacts.length>0&&(0,Y.jsx)(`span`,{children:t.artifacts.length})]},e))}),(0,Y.jsxs)(`div`,{id:`${B}-panel`,className:`tw-tab-panel tw-tab-${Se}`,role:`tabpanel`,"aria-labelledby":`${B}-${Se}`,children:[Se===`task`&&(0,Y.jsxs)(Y.Fragment,{children:[(0,Y.jsxs)(`div`,{className:`tw-messages`,ref:R,role:`log`,"aria-label":`任务消息`,"aria-live":`polite`,"aria-relevant":`additions text`,onScroll:e=>{let t=e.currentTarget;z.current=t.scrollHeight-t.scrollTop-t.clientHeight<80},children:[t.messages.length?t.messages.map((e,t)=>(0,Y.jsxs)(`article`,{className:`tw-message tw-message-${e.role}`,children:[(0,Y.jsxs)(`div`,{className:`tw-message-meta`,children:[(0,Y.jsx)(`strong`,{children:e.role===`user`?`你`:e.role===`assistant`?(0,Y.jsxs)(Y.Fragment,{children:[(0,Y.jsx)(se,{size:15}),`AAB助手`]}):(0,Y.jsxs)(Y.Fragment,{children:[(0,Y.jsx)(un,{size:13}),`系统`]})}),(0,Y.jsx)(`time`,{dateTime:e.time,children:Qn(e.time)})]}),(0,Y.jsx)(`div`,{className:`tw-message-text`,children:l&&t===0&&e.role===`user`?(0,Y.jsxs)(`details`,{className:`sdk-request-message`,children:[(0,Y.jsxs)(`summary`,{children:[(0,Y.jsx)(`span`,{children:e.content.split(`
-`)[0]}),(0,Y.jsx)(pe,{size:14})]}),(0,Y.jsx)(`div`,{children:e.content})]}):e.content})]},e.id)):(0,Y.jsx)(`div`,{className:`tw-message-empty`,children:ie?`任务已提交`:`暂无消息`}),ie&&(0,Y.jsxs)(`div`,{className:`tw-running`,role:`status`,children:[(0,Y.jsx)(Tt,{size:15,className:`spin`}),(0,Y.jsxs)(`span`,{className:l?`sdk-live-progress`:void 0,children:[(0,Y.jsx)(`span`,{children:t.status===`waiting_approval`?`等待授权`:t.phase||`正在执行`}),l&&t.events.at(-1)&&(0,Y.jsx)(`small`,{children:t.events.at(-1)?.message})]})]})]}),W]}),Se===`activity`&&(0,Y.jsxs)(Y.Fragment,{children:[(0,Y.jsxs)(`div`,{className:`tw-log-toolbar`,children:[(0,Y.jsxs)(`span`,{children:[t.events.length,` 条记录`]}),(0,Y.jsxs)(`label`,{className:`tw-search`,children:[(0,Y.jsx)(on,{size:14}),(0,Y.jsx)(`input`,{value:E,onChange:e=>O(e.target.value),placeholder:`搜索记录`,"aria-label":`搜索执行记录`})]}),(0,Y.jsxs)(`select`,{value:w,onChange:e=>T(e.target.value),"aria-label":`筛选执行记录`,children:[(0,Y.jsx)(`option`,{value:`all`,children:`全部事件`}),(0,Y.jsx)(`option`,{value:`step`,children:`执行步骤`}),(0,Y.jsx)(`option`,{value:`tool`,children:`工具调用`}),(0,Y.jsx)(`option`,{value:`model`,children:`模型事件`}),(0,Y.jsx)(`option`,{value:`log`,children:`运行日志`}),(0,Y.jsx)(`option`,{value:`approval`,children:`权限请求`}),(0,Y.jsx)(`option`,{value:`issues`,children:`警告与错误`})]})]}),he.length?(0,Y.jsx)(`ol`,{className:`tw-events`,children:he.map(e=>(0,Y.jsxs)(`li`,{className:`tw-event tw-event-${e.level}`,children:[(0,Y.jsx)(`time`,{dateTime:e.time,children:$n(e.time)}),(0,Y.jsx)(`span`,{className:`tw-event-kind`,children:ai[e.kind]}),(0,Y.jsxs)(`div`,{className:`tw-event-body`,children:[(0,Y.jsx)(`p`,{children:e.message}),e.detail&&(0,Y.jsxs)(`details`,{children:[(0,Y.jsx)(`summary`,{children:`详情`}),(0,Y.jsx)(`pre`,{children:e.detail})]})]}),e.level===`error`&&(0,Y.jsx)(ye,{size:14})]},e.id))}):(0,Y.jsx)(cr,{compact:!0,icon:En,title:t.events.length?`没有匹配的记录`:`暂无执行记录`,description:``}),me.length>0&&(0,Y.jsxs)(`details`,{className:`tw-permission-history`,children:[(0,Y.jsxs)(`summary`,{children:[(0,Y.jsx)(fn,{size:14}),`已处理权限`]}),me.map(e=>(0,Y.jsxs)(`div`,{children:[(0,Y.jsx)(`code`,{children:e.permission}),(0,Y.jsx)(`span`,{children:e.status===`approved`?`已允许`:`已拒绝`})]},e.id))]})]}),Se===`artifacts`&&(t.artifacts.length?(0,Y.jsx)(`div`,{className:`tw-artifacts`,children:t.artifacts.map(e=>{let n=e.type===`diff`?Ze:e.type===`report`?$e:e.type===`directory`?rt:tt;return(0,Y.jsxs)(`div`,{className:`tw-artifact`,children:[(0,Y.jsx)(`span`,{className:`tw-artifact-icon`,children:(0,Y.jsx)(n,{size:21})}),(0,Y.jsxs)(`div`,{className:`tw-artifact-info`,children:[(0,Y.jsx)(`strong`,{children:e.name}),(0,Y.jsx)(`code`,{children:e.path}),e.size!==void 0&&(0,Y.jsx)(`span`,{children:tr(e.size)})]}),e.type===`directory`?e.path===t.workspacePath?(0,Y.jsx)(X,{compact:!0,icon:rt,loading:v===`workspace`,disabled:v!==null,onClick:()=>void de(),children:`打开`}):(0,Y.jsx)(`span`,{className:`tw-directory-label`,children:`目录`}):(0,Y.jsxs)(`a`,{href:q.artifactUrl(t.id,e.id),className:`button button-secondary button-compact`,download:!0,children:[(0,Y.jsx)(Fe,{size:14}),`下载`]})]},e.id)})}):(0,Y.jsx)(cr,{icon:$e,title:`暂无文件`,description:``})),Se===`inspection`&&t.report&&(0,Y.jsx)(`div`,{className:`tw-inspection`,children:(0,Y.jsx)(ti,{report:t.report})})]}),l&&Se!==`task`&&W,(0,Y.jsxs)(`footer`,{className:`tw-task-footer`,children:[(0,Y.jsxs)(`span`,{title:t.id,children:[`任务 `,t.id.slice(0,8)]}),(0,Y.jsxs)(`span`,{children:[`更新于 `,Qn(t.updatedAt)]}),u&&(0,Y.jsx)(Tt,{size:12,className:`spin`,"aria-label":`正在更新`})]})]})}var di=[{value:`unity`,label:`Unity`,detail:`自动匹配编辑器版本`},{value:`xcode`,label:`Xcode`,detail:`原生 iOS 工程`},{value:`android`,label:`Android`,detail:`原生 Gradle 工程`}],fi=e=>di.find(t=>t.value===e)?.label||`待识别`;function pi(e,t){let n=e.unityVersion||`工程已识别`,r=e.unityDistribution===`china`?`国内版`:e.unityDistribution===`international`?`国际版`:`发行版本待核实`,i=`开始后自动检查编辑器，缺少时下载安装`;return t&&(i=e.unityToolchain?.versionIssue?`版本记录需核实，请修正后确认重新扫描`:e.unityToolchain?.matchingEditor?`已找到匹配编辑器，接入前验证平台模块`:`编辑器尚未匹配，请查看下方原因后重新扫描`),`Unity ${n}${e.unityRevision?` (${e.unityRevision})`:``} · ${r} · ${i}`}function mi({plugins:e,tasks:t,selectedTaskId:n,active:r,settings:i,nativeDialog:a,onUpdateTask:o,navigate:s,notify:c}){let l=gr()?.role!==`member`,u=(0,D.useMemo)(()=>e.filter(e=>e.kind===`sdk`&&e.id!==`gp-build`).flatMap(e=>e.profiles.map(t=>({key:`${e.id}/${t.id}`,partner:t.partner||t.name,plugin:e,profile:t}))),[e]),[d,f]=(0,D.useState)(``),[p,m]=(0,D.useState)(``),h=u.filter(e=>e.partner===d),g=h.find(e=>e.key===p)||h[0],_=g?.profile,v=g?.partner===`01`||g?.plugin.id===`01sdk`,[y,b]=(0,D.useState)(1),[x,S]=(0,D.useState)(``),[C,w]=(0,D.useState)(``),[T,E]=(0,D.useState)({}),[O,k]=(0,D.useState)(``),[A,j]=(0,D.useState)(``),[M,N]=(0,D.useState)({}),[P,F]=(0,D.useState)(``),[I,L]=(0,D.useState)(``),[R,z]=(0,D.useState)(!1),[B,te]=(0,D.useState)(!1),[ne,re]=(0,D.useState)(!1),[ie,ae]=(0,D.useState)(0),[V,oe]=(0,D.useState)(null),[ce,H]=(0,D.useState)(``),U=(0,D.useRef)(0),le=(0,D.useRef)(!1),ue=(0,D.useRef)(null),fe=(0,D.useRef)(null),W=Zn(i),G=t.find(e=>e.id===n),me=t.filter(e=>e.profileId&&e.projectPath&&e.pluginId!==`gp-build`),he=_?.parameters.filter(e=>e.required)||[],ge=_?.parameters.filter(e=>!e.required)||[],_e=!_||!C||(C===`unity`?v:C===`xcode`?_.platform===`ios`:_.platform===`android`),ve=V&&V.type!==`unknown`&&C&&V.type!==C,be=v&&V&&_?ei(V,_.platform):void 0,xe=!(!x.trim()||!C||!_e||I||ve||ne||be);(0,D.useEffect)(()=>{E(nr(_?.parameters||[])),k(``),N({}),F(``)},[g?.key,g?.plugin.version,_?.version]),(0,D.useEffect)(()=>{if(!x.trim()||n||!r)return;let e=!1,t=U.current;re(!0);let i=window.setTimeout(()=>{q.inspectProject(x.trim(),void 0,v?`01`:void 0).then(n=>{e||t!==U.current||(oe(n),n.type===`unknown`?L(`没有识别到工程，请选择包含 ProjectSettings、.xcodeproj / .xcworkspace 或 Gradle 配置的根目录。`):w(e=>e||n.type))}).catch(n=>{!e&&t===U.current&&L(J(n))}).finally(()=>{!e&&t===U.current&&re(!1)})},400);return()=>{e=!0,window.clearTimeout(i)}},[x,n,r,v,ie]);function Se(e){U.current++,S(e),w(``),oe(null),L(``),F(``),H(``),re(!!e.trim())}function Ce(){U.current++,oe(null),re(!0),L(``),F(``),ae(e=>e+1)}async function we(){te(!0),H(``);try{let e=await q.chooseDirectory();e.path&&!e.cancelled?Se(e.path):H(`已取消选择，当前工程保留。`)}catch(e){F(J(e))}finally{te(!1)}}function Te(e,t){E(n=>({...n,[e]:t})),N(t=>{let n={...t};return delete n[e],n})}async function Ee(){if(le.current)return;if(F(``),!g){b(1),F(d?`合作方 ${d} 暂无可用的接入方案，请先配置。`:`请先选择合作方和接入版本。`);return}if(!W){l?s(`settings`):F(`请联系管理员配置本机模型连接。`);return}if(!xe||!C){b(2),F(be||`请先确认本地工程和工程类型。`),ue.current?.focus();return}let e=rr(g.profile.parameters,T);if(N(e.errors),Object.keys(e.errors).length){b(3),fe.current&&ge.some(t=>e.errors[t.key])&&(fe.current.open=!0),F(`请补齐标记的接入参数。`);return}let t=O.trim();le.current=!0,z(!0);try{let n=await q.createTask({pluginId:g.plugin.id,profileId:g.profile.id,projectPath:x.trim(),projectType:C,parameters:e.values,mode:`execute`,...t?{customContext:t}:{},...A.trim()?{prompt:A.trim()}:{}});E(e=>ir(e,g.profile.parameters)),k(``),j(``),o(n),s(`sdk`,n.id)}catch(e){F(J(e))}finally{le.current=!1,z(!1)}}function De(){F(``),b(1),s(`sdk`)}return(0,Y.jsxs)(`div`,{className:`sdk-page tw-root`,children:[(0,Y.jsx)(sr,{eyebrow:`SDK INTEGRATION`,title:`SDK 接入`,description:u.length||n?`选好合作方和工程，接入交给 AI。后续需求，都在这里聊。`:`选择合作方类型，等待上传对应的接入 Skill。`,actions:(0,Y.jsxs)(Y.Fragment,{children:[me.length>0&&(0,Y.jsxs)(`label`,{className:`sdk-history`,children:[(0,Y.jsx)(Zt,{size:15}),(0,Y.jsxs)(`select`,{"aria-label":`接入历史`,value:n||``,onChange:e=>e.target.value?s(`sdk`,e.target.value):De(),children:[(0,Y.jsx)(`option`,{value:``,children:`接入历史`}),n&&!me.some(e=>e.id===n)&&(0,Y.jsx)(`option`,{value:n,children:`当前接入`}),me.map(e=>(0,Y.jsxs)(`option`,{value:e.id,children:[er(e.projectPath),` · `,Jn[e.status],` · `,Qn(e.createdAt)]},e.id))]})]}),n&&(0,Y.jsx)(X,{icon:Gt,onClick:De,children:`新建接入`})]})}),n?(0,Y.jsxs)(Y.Fragment,{children:[G&&(0,Y.jsxs)(`details`,{className:`sdk-session-context`,children:[(0,Y.jsxs)(`summary`,{children:[(0,Y.jsx)(`span`,{className:`sdk-context-icon`,children:(0,Y.jsx)(rt,{size:18})}),(0,Y.jsxs)(`span`,{className:`sdk-context-name`,children:[(0,Y.jsx)(`strong`,{children:er(G.projectPath)}),(0,Y.jsx)(`span`,{children:G.name})]}),(0,Y.jsx)(`span`,{className:`sdk-context-type`,children:fi(G.projectType||G.report?.type)}),(0,Y.jsxs)(`span`,{className:`sdk-context-toggle`,children:[`接入配置`,(0,Y.jsx)(pe,{size:14})]})]}),(0,Y.jsxs)(`dl`,{children:[(0,Y.jsx)(`dt`,{children:`工程目录`}),(0,Y.jsx)(`dd`,{children:G.projectPath}),(0,Y.jsx)(`dt`,{children:`方案版本`}),(0,Y.jsx)(`dd`,{children:G.profileVersion||G.skillVersion||`见任务记录`}),(0,Y.jsx)(`dt`,{children:`Skill 版本`}),(0,Y.jsx)(`dd`,{children:G.skillVersion||`—`}),(0,Y.jsx)(`dt`,{children:`接入参数`}),(0,Y.jsx)(`dd`,{children:Object.entries(G.parameters).map(([e,t])=>(0,Y.jsxs)(`span`,{children:[e,`：`,String(t)]},e))})]})]}),(0,Y.jsx)(`section`,{className:`sdk-conversation sdk-conversation-active`,"aria-label":`SDK 接入对话`,children:(0,Y.jsx)(ui,{taskId:n,task:G,isNew:!1,active:r,settings:i,navigate:s,onUpdateTask:o,notify:c,refreshGeneration:0,embeddedSdk:!0},n)})]}):(0,Y.jsxs)(Y.Fragment,{children:[(0,Y.jsxs)(`div`,{className:`sdk-setup`,"aria-label":`接入配置`,children:[(0,Y.jsxs)(`section`,{className:`sdk-step${!g||y===1?` sdk-step-open`:``}`,children:[(0,Y.jsxs)(`button`,{className:`sdk-step-heading`,"aria-expanded":!g||y===1,"aria-controls":`sdk-partner-panel`,disabled:R,onClick:()=>b(1),children:[(0,Y.jsx)(`span`,{className:`sdk-step-number${g?` sdk-step-done`:``}`,children:g?(0,Y.jsx)(de,{size:14}):`1`}),(0,Y.jsx)(`strong`,{children:`选择合作方`}),(0,Y.jsx)(`span`,{className:`sdk-step-summary`,children:g?`${g.partner} · ${_?.attribution} · v${_?.version}`:d?`${d} · Skill 待上传`:`合作方类型`}),(0,Y.jsx)(pe,{size:16})]}),(0,Y.jsxs)(`div`,{id:`sdk-partner-panel`,className:`sdk-step-body`,hidden:!!g&&y!==1,children:[(0,Y.jsxs)(`div`,{className:`form-grid`,children:[(0,Y.jsxs)(`div`,{className:`field`,children:[(0,Y.jsx)(`label`,{htmlFor:`sdk-partner`,children:`合作方类型`}),(0,Y.jsxs)(`select`,{id:`sdk-partner`,value:d,disabled:R,onChange:e=>{let t=e.target.value;f(t),m(u.find(e=>e.partner===t)?.key||``),F(``)},children:[(0,Y.jsx)(`option`,{value:``,disabled:!0,children:`请选择合作方`}),Yr.map(e=>(0,Y.jsx)(`option`,{value:e,children:e},e))]})]}),h.length>0&&(0,Y.jsxs)(`div`,{className:`field`,children:[(0,Y.jsx)(`label`,{htmlFor:`sdk-version`,children:`接入方案 / 版本`}),(0,Y.jsx)(`select`,{id:`sdk-version`,value:g?.key||``,disabled:R,onChange:e=>m(e.target.value),children:h.map(e=>(0,Y.jsxs)(`option`,{value:e.key,children:[e.profile.platform===`ios`?`iOS`:`Android`,` · `,e.profile.attribution,` · v`,e.profile.version]},e.key))})]})]}),_&&(0,Y.jsx)(`p`,{className:`sdk-profile-description`,children:_.description}),!h.length&&(0,Y.jsx)(`p`,{className:`sdk-profile-description`,role:`status`,children:d?`合作方 ${d} 的接入 Skill 待上传。`:`各合作方的接入 Skill 待上传。`}),g&&(0,Y.jsx)(`div`,{className:`sdk-step-next`,children:(0,Y.jsx)(X,{compact:!0,icon:ee,disabled:R,onClick:()=>b(2),children:`选择工程`})})]})]}),g&&(0,Y.jsxs)(Y.Fragment,{children:[(0,Y.jsxs)(`section`,{className:`sdk-step${y===2?` sdk-step-open`:``}`,children:[(0,Y.jsxs)(`button`,{className:`sdk-step-heading`,"aria-expanded":y===2,"aria-controls":`sdk-project-panel`,disabled:!g||R,onClick:()=>b(2),children:[(0,Y.jsx)(`span`,{className:`sdk-step-number${xe?` sdk-step-done`:``}`,children:xe?(0,Y.jsx)(de,{size:14}):`2`}),(0,Y.jsx)(`strong`,{children:`选择本地工程`}),(0,Y.jsx)(`span`,{className:`sdk-step-summary`,children:x?`${er(x)}${C?` · ${fi(C)}`:``}`:`工程目录与类型`}),(0,Y.jsx)(pe,{size:16})]}),(0,Y.jsxs)(`div`,{id:`sdk-project-panel`,className:`sdk-step-body`,hidden:y!==2,children:[(0,Y.jsxs)(`div`,{className:`field${I?` field-invalid`:``}`,children:[(0,Y.jsx)(`label`,{htmlFor:`sdk-project-path`,children:`工程目录`}),(0,Y.jsxs)(`div`,{className:`input-with-button`,children:[(0,Y.jsxs)(`div`,{className:`input-leading-icon`,children:[(0,Y.jsx)(rt,{size:17}),(0,Y.jsx)(`input`,{ref:ue,id:`sdk-project-path`,value:x,onChange:e=>Se(e.target.value),placeholder:`选择文件夹，或输入本地工程的绝对路径`,autoComplete:`off`,spellCheck:!1,disabled:R||B,"aria-invalid":!!I,"aria-describedby":`sdk-path-help`})]}),(0,Y.jsx)(X,{icon:rt,loading:B,disabled:!a||R,title:a?`选择本地工程目录`:`请在输入框填写本地绝对路径`,onClick:()=>void we(),children:`选择文件夹`})]}),(0,Y.jsx)(`p`,{id:`sdk-path-help`,className:I?`field-error`:`field-help`,children:I||ce||`选择工程根目录，AI 会在工作副本中完成接入。`})]}),(0,Y.jsxs)(`fieldset`,{className:`sdk-project-types`,disabled:R,children:[(0,Y.jsx)(`legend`,{children:`工程类型`}),(0,Y.jsx)(`div`,{children:di.map(e=>{let t=e.value===`unity`?v:e.value===`xcode`?_?.platform===`ios`:_?.platform===`android`;return(0,Y.jsxs)(`label`,{className:`${C===e.value?`sdk-type-selected`:``}${t?``:` sdk-type-unavailable`}`,children:[(0,Y.jsx)(`input`,{type:`radio`,name:`sdk-project-type`,value:e.value,checked:C===e.value,disabled:!t,onChange:()=>w(e.value)}),(0,Y.jsxs)(`span`,{children:[(0,Y.jsx)(`strong`,{children:e.label}),(0,Y.jsx)(`small`,{children:t?e.detail:`当前方案不适用`})]}),C===e.value&&(0,Y.jsx)(de,{size:15})]},e.value)})})]}),(0,Y.jsx)(`div`,{className:`sdk-scan-status`,role:`status`,children:ne?(0,Y.jsxs)(Y.Fragment,{children:[(0,Y.jsx)(Tt,{size:13,className:`spin`}),`正在识别工程…`]}):ve?(0,Y.jsxs)(`span`,{className:`field-error`,children:[`实际识别为 `,fi(V?.type),`，请确认工程类型。`]}):_e?V?.type===`unity`?(0,Y.jsxs)(Y.Fragment,{children:[be?(0,Y.jsx)(ye,{size:13}):(0,Y.jsx)(de,{size:13}),pi(V,!!v)]}):V&&V.type!==`unknown`?(0,Y.jsxs)(Y.Fragment,{children:[(0,Y.jsx)(de,{size:13}),`已识别 `,fi(V.type),` 工程`]}):(0,Y.jsx)(`span`,{children:`选择目录后自动识别，也可以手动选择工程类型。`}):(0,Y.jsx)(`span`,{className:`field-error`,children:`此工程与合作方的目标平台不匹配，请更换工程或方案。`})}),be&&V&&_&&(0,Y.jsxs)(Z,{tone:`warning`,title:`Unity 环境需要准备`,children:[(0,Y.jsx)(`p`,{children:Qr(V,_.platform)}),(0,Y.jsx)(`p`,{children:be}),(0,Y.jsx)(`p`,{children:`确认已完成编辑器及平台模块安装后重新扫描；只下载安装包不会完成安装。自定义安装目录请先在 Unity Hub 中定位该编辑器。`}),V.unityToolchain&&(0,Y.jsxs)(`details`,{className:`sdk-unity-diagnostics`,children:[(0,Y.jsx)(`summary`,{children:`查看本次扫描详情`}),V.unityToolchain.versionCandidates.length>0&&(0,Y.jsxs)(Y.Fragment,{children:[(0,Y.jsx)(`p`,{children:`已找到的同版本编辑器：`}),(0,Y.jsx)(`ul`,{children:V.unityToolchain.versionCandidates.map(e=>(0,Y.jsxs)(`li`,{children:[(0,Y.jsx)(`code`,{children:e.path}),(0,Y.jsx)(`br`,{}),`版本：`,e.version,`；revision：`,e.revision||`未能读取`]},e.path))})]}),V.unityToolchain.scanWarnings.length>0&&(0,Y.jsxs)(Y.Fragment,{children:[(0,Y.jsx)(`p`,{children:`扫描中遇到的问题：`}),(0,Y.jsx)(`ul`,{children:V.unityToolchain.scanWarnings.map((e,t)=>(0,Y.jsx)(`li`,{children:e},t))})]}),(0,Y.jsx)(`p`,{children:`已扫描的位置：`}),(0,Y.jsx)(`ul`,{children:V.unityToolchain.searchedPaths.map(e=>(0,Y.jsx)(`li`,{children:(0,Y.jsx)(`code`,{children:e})},e))})]}),(0,Y.jsx)(`div`,{className:`form-actions`,children:(0,Y.jsx)(X,{compact:!0,icon:Yt,loading:ne,disabled:R||ne,onClick:Ce,children:V.unityToolchain?.versionIssue||V.unityDistribution===`unknown`?`确认并重新扫描`:`已安装，确认并重新扫描`})})]}),(0,Y.jsx)(`div`,{className:`sdk-step-next`,children:(0,Y.jsx)(X,{compact:!0,icon:ee,disabled:!xe||R,onClick:()=>b(3),children:`填写接入参数`})})]})]}),(0,Y.jsxs)(`section`,{className:`sdk-step${y===3?` sdk-step-open`:``}`,children:[(0,Y.jsxs)(`button`,{className:`sdk-step-heading`,"aria-expanded":y===3,"aria-controls":`sdk-parameters-panel`,disabled:!g||!xe||R,onClick:()=>b(3),children:[(0,Y.jsx)(`span`,{className:`sdk-step-number`,children:`3`}),(0,Y.jsx)(`strong`,{children:`提供接入参数`}),(0,Y.jsx)(`span`,{className:`sdk-step-summary`,children:_?`${_.attribution} · 参数随方案版本加载`:`根据合作方方案填写`}),(0,Y.jsx)(pe,{size:16})]}),(0,Y.jsxs)(`div`,{id:`sdk-parameters-panel`,className:`sdk-step-body`,hidden:y!==3,children:[(0,Y.jsx)(`p`,{className:`sdk-parameter-hint`,children:`填写本次工程的参数，AI 会结合所选方案和工程继续处理。`}),he.length?(0,Y.jsx)(Xr,{definitions:he,values:T,errors:M,nativeDialog:a,disabled:R,onChange:Te}):(0,Y.jsx)(`p`,{className:`field-help`,children:`此方案没有预置参数，请在下方按本次接入口径填写。`}),ge.length>0&&(0,Y.jsxs)(`details`,{className:`sdk-optional`,ref:fe,children:[(0,Y.jsxs)(`summary`,{children:[`更多参数与凭据`,(0,Y.jsxs)(`span`,{children:[ge.length,` 项`,(0,Y.jsx)(pe,{size:14})]})]}),(0,Y.jsx)(Xr,{definitions:ge,values:T,errors:M,nativeDialog:a,disabled:R,onChange:Te})]},p),(0,Y.jsxs)(`div`,{className:`field sdk-custom-parameters`,children:[(0,Y.jsx)(`label`,{htmlFor:`sdk-custom-parameters`,children:`自定义接入参数（原样交给 AI）`}),(0,Y.jsx)(`textarea`,{id:`sdk-custom-parameters`,value:O,onChange:e=>k(e.target.value),rows:4,disabled:R,spellCheck:!1,placeholder:`格式不限，例如把整行参数、表格或 JSON 直接粘贴到这里，AI 会按原文理解。`,"aria-describedby":`sdk-custom-parameters-help`}),(0,Y.jsx)(`p`,{id:`sdk-custom-parameters-help`,className:`field-help`,children:`不做字段和格式校验；内容会原样交给 AI 结合方案与工程理解。`})]})]})]})]})]}),g&&(0,Y.jsxs)(`section`,{className:`sdk-conversation sdk-conversation-new`,"aria-label":`SDK 接入对话`,children:[(0,Y.jsxs)(`header`,{className:`sdk-chat-heading`,children:[(0,Y.jsx)(se,{size:20}),(0,Y.jsxs)(`div`,{children:[(0,Y.jsx)(`h2`,{children:`和 AI 一起完成接入`}),(0,Y.jsx)(`p`,{children:`你的选择会自动整理为接入任务。开始后，在这里查看进度、补充需求或处理问题。`})]})]}),(0,Y.jsxs)(`div`,{className:`sdk-prompt-context`,children:[(0,Y.jsx)(`span`,{children:d||`待选合作方`}),(0,Y.jsx)(`span`,{children:x?er(x):`待选工程`}),(0,Y.jsx)(`span`,{children:C?fi(C):`待确认类型`})]}),P&&(0,Y.jsx)(Z,{tone:`error`,children:P}),!W&&(0,Y.jsxs)(Z,{tone:`warning`,children:[l?`请先配置模型连接，配置后可回来继续接入。`:`请联系管理员配置本机模型连接。`,l&&(0,Y.jsx)(X,{variant:`ghost`,compact:!0,onClick:()=>s(`settings`),children:`打开设置`})]}),(0,Y.jsxs)(`form`,{className:`sdk-start-composer`,onSubmit:e=>{e.preventDefault(),Ee()},children:[(0,Y.jsx)(`textarea`,{"aria-label":`补充接入需求`,value:A,onChange:e=>j(e.target.value),rows:3,maxLength:3e4,disabled:R,placeholder:`还可以补充特殊需求、协议说明或本次要调整的内容…`,onKeyDown:e=>{e.key===`Enter`&&!e.shiftKey&&!e.nativeEvent.isComposing&&e.keyCode!==229&&(e.preventDefault(),Ee())}}),(0,Y.jsxs)(`div`,{children:[(0,Y.jsx)(`span`,{className:`sdk-start-note`,children:`选择完成后，AI 自动开始处理`}),(0,Y.jsx)(X,{type:`submit`,variant:`primary`,icon:W?Vt:un,loading:R,disabled:R||B||ne||!!be||!W&&!l,children:W?`开始接入`:l?`配置模型`:`等待管理员配置`})]})]})]})]})]})}var hi={category:`other`,projectPath:``,versionName:``,versionCode:``,module:``,variant:``};function gi(e){try{let t=JSON.parse(localStorage.getItem(e)||`{}`);if(!t||typeof t!=`object`||Array.isArray(t))return hi;let n=Object.fromEntries(Object.keys(hi).map(e=>[e,typeof t[e]==`string`?t[e]:``]));return{...n,category:n.category===`game`?`game`:`other`}}catch{return hi}}function _i(e){try{return localStorage.getItem(e)||``}catch{return``}}function vi(e){return e?e.stage===`preparing`?0:e.stage===`compiling`||e.stage===`repairing`?1:e.stage===`awaiting_input`?e.resumeStage===`packaging`?3:1:e.stage===`awaiting_confirmation`?2:e.stage===`packaging`||e.stage===`completed`||e.approvedAt?3:e.compiledAt?2:1:-1}function yi({tasks: e, plugins: t, settings: n, nativeDialog: r, taskId: i, navigate: a, onUpdateTask: o, notify: s}) {
+`)[0]}),(0,Y.jsx)(pe,{size:14})]}),(0,Y.jsx)(`div`,{children:e.content})]}):e.content})]},e.id)):(0,Y.jsx)(`div`,{className:`tw-message-empty`,children:ie?`任务已提交`:`暂无消息`}),ie&&(0,Y.jsxs)(`div`,{className:`tw-running`,role:`status`,children:[(0,Y.jsx)(Tt,{size:15,className:`spin`}),(0,Y.jsxs)(`span`,{className:l?`sdk-live-progress`:void 0,children:[(0,Y.jsx)(`span`,{children:t.status===`waiting_approval`?`等待授权`:t.phase||`正在执行`}),l&&t.events.at(-1)&&(0,Y.jsx)(`small`,{children:t.events.at(-1)?.message})]})]})]}),W]}),Se===`activity`&&(0,Y.jsxs)(Y.Fragment,{children:[(0,Y.jsxs)(`div`,{className:`tw-log-toolbar`,children:[(0,Y.jsxs)(`span`,{children:[t.events.length,` 条记录`]}),(0,Y.jsxs)(`label`,{className:`tw-search`,children:[(0,Y.jsx)(on,{size:14}),(0,Y.jsx)(`input`,{value:E,onChange:e=>O(e.target.value),placeholder:`搜索记录`,"aria-label":`搜索执行记录`})]}),(0,Y.jsxs)(`select`,{value:w,onChange:e=>T(e.target.value),"aria-label":`筛选执行记录`,children:[(0,Y.jsx)(`option`,{value:`all`,children:`全部事件`}),(0,Y.jsx)(`option`,{value:`step`,children:`执行步骤`}),(0,Y.jsx)(`option`,{value:`tool`,children:`工具调用`}),(0,Y.jsx)(`option`,{value:`model`,children:`模型事件`}),(0,Y.jsx)(`option`,{value:`log`,children:`运行日志`}),(0,Y.jsx)(`option`,{value:`approval`,children:`权限请求`}),(0,Y.jsx)(`option`,{value:`issues`,children:`警告与错误`})]})]}),he.length?(0,Y.jsx)(`ol`,{className:`tw-events`,children:he.map(e=>(0,Y.jsxs)(`li`,{className:`tw-event tw-event-${e.level}`,children:[(0,Y.jsx)(`time`,{dateTime:e.time,children:$n(e.time)}),(0,Y.jsx)(`span`,{className:`tw-event-kind`,children:ai[e.kind]}),(0,Y.jsxs)(`div`,{className:`tw-event-body`,children:[(0,Y.jsx)(`p`,{children:e.message}),e.detail&&(0,Y.jsxs)(`details`,{children:[(0,Y.jsx)(`summary`,{children:`详情`}),(0,Y.jsx)(`pre`,{children:e.detail})]})]}),e.level===`error`&&(0,Y.jsx)(ye,{size:14})]},e.id))}):(0,Y.jsx)(cr,{compact:!0,icon:En,title:t.events.length?`没有匹配的记录`:`暂无执行记录`,description:``}),me.length>0&&(0,Y.jsxs)(`details`,{className:`tw-permission-history`,children:[(0,Y.jsxs)(`summary`,{children:[(0,Y.jsx)(fn,{size:14}),`已处理权限`]}),me.map(e=>(0,Y.jsxs)(`div`,{children:[(0,Y.jsx)(`code`,{children:e.permission}),(0,Y.jsx)(`span`,{children:e.status===`approved`?`已允许`:`已拒绝`})]},e.id))]})]}),Se===`artifacts`&&(t.artifacts.length?(0,Y.jsx)(`div`,{className:`tw-artifacts`,children:t.artifacts.map(e=>{let n=e.type===`diff`?Ze:e.type===`report`?$e:e.type===`directory`?rt:tt;return(0,Y.jsxs)(`div`,{className:`tw-artifact`,children:[(0,Y.jsx)(`span`,{className:`tw-artifact-icon`,children:(0,Y.jsx)(n,{size:21})}),(0,Y.jsxs)(`div`,{className:`tw-artifact-info`,children:[(0,Y.jsx)(`strong`,{children:e.name}),(0,Y.jsx)(`code`,{children:e.path}),e.size!==void 0&&(0,Y.jsx)(`span`,{children:tr(e.size)})]}),e.type===`directory`?e.path===t.workspacePath?(0,Y.jsx)(X,{compact:!0,icon:rt,loading:v===`workspace`,disabled:v!==null,onClick:()=>void de(),children:`打开`}):(0,Y.jsx)(`span`,{className:`tw-directory-label`,children:`目录`}):(0,Y.jsxs)(`a`,{href:q.artifactUrl(t.id,e.id),className:`button button-secondary button-compact`,download:!0,children:[(0,Y.jsx)(Fe,{size:14}),`下载`]})]},e.id)})}):(0,Y.jsx)(cr,{icon:$e,title:`暂无文件`,description:``})),Se===`inspection`&&t.report&&(0,Y.jsx)(`div`,{className:`tw-inspection`,children:(0,Y.jsx)(ti,{report:t.report})})]}),l&&Se!==`task`&&W,(0,Y.jsxs)(`footer`,{className:`tw-task-footer`,children:[(0,Y.jsxs)(`span`,{title:t.id,children:[`任务 `,t.id.slice(0,8)]}),(0,Y.jsxs)(`span`,{children:[`更新于 `,Qn(t.updatedAt)]}),u&&(0,Y.jsx)(Tt,{size:12,className:`spin`,"aria-label":`正在更新`})]})]})}var di=[{value:`unity`,label:`Unity`,detail:`自动匹配编辑器版本`},{value:`xcode`,label:`Xcode`,detail:`原生 iOS 工程`},{value:`android`,label:`Android`,detail:`原生 Gradle 工程`}],fi=e=>di.find(t=>t.value===e)?.label||`待识别`;function pi(e,t){let n=e.unityVersion||`工程已识别`,r=e.unityDistribution===`china`?`国内版`:e.unityDistribution===`international`?`国际版`:`发行版本待核实`,i=`开始后自动检查编辑器，缺少时下载安装`;return t&&(i=e.unityToolchain?.versionIssue?`版本记录需核实，请修正后确认重新扫描`:e.unityToolchain?.matchingEditor?`已找到匹配编辑器，接入前验证平台模块`:`编辑器尚未匹配，请查看下方原因后重新扫描`),`Unity ${n}${e.unityRevision?` (${e.unityRevision})`:``} · ${r} · ${i}`}
+const AabSdkIntroductions = {"partners":{"01":"面向 Unity iOS / Xcode 工程，接入 AppsFlyer、入口接口与内嵌网页。","02":"面向 Android 工程，接入 PA SDK、AppsFlyer 与广告标识，检查启动和网页流程。","03":"面向 iOS 工程，接入 PA 类 SDK 与 AppsFlyer，处理加载、网页恢复和音视频切换。","04":"面向 iOS 工程，接入 PA / PAKit、Adjust 与跟踪授权，配置业务事件上报。","05":"提供 iOS 和 Android 两种方案，接入 PA / PAKit 与 Adjust，并辅助测试交付。"},"profiles":{"01-sdk/01-ios-af":{"partner":"01","title":"01 · Unity iOS / AppsFlyer","summary":"把归因统计、入口接口和内嵌 H5 网页接入游戏，衔接网页与游戏画面的切换。","project":"Unity iOS 工程或对应的 Xcode 导出工程。当前内置方案为 iOS + AppsFlyer。","features":["AppsFlyer 归因","H5 / WebView","横竖屏切换","可选 Facebook / ATT"],"output":"接入后的 iOS 工程与验证记录；iOS 构建需要 Xcode，不生成 AAB。","materials":"完整工程、合作方接入文档与入口配置、自己的 AppsFlyer 参数；真机测试需 iOS 签名。"},"02-sdk/02-android":{"partner":"02","title":"02 · Android / AppsFlyer","summary":"接入合作方 PA SDK、AppsFlyer 和 GAID 广告标识，处理启动、网页显示与方向恢复。","project":"包含 Gradle 配置的 Android / Android Studio 工程根目录。","features":["PA SDK","AppsFlyer 归因","GAID 广告标识","网页与方向恢复"],"output":"接入工程及独立测试 APK；如需正式 AAB，需明确提出并准备原签名。","materials":"完整工程、合作方 SDK / Demo / 文档、自己的归因参数，以及项目需要的 Android 工具链。"},"03-sdk/03-ios":{"partner":"03","title":"03 · iOS / AppsFlyer","summary":"接入 PA 类 SDK 与 AppsFlyer，完善启动加载、网页失败恢复，以及游戏音视频的暂停和恢复。","project":"可由 Xcode 打开的 iOS 工程（.xcodeproj 或 .xcworkspace）。","features":["PA 类 SDK","AppsFlyer 归因","加载与网页恢复","音视频暂停 / 恢复"],"output":"接入后的 iOS 工程，可按需求辅助生成和安装真机测试包；不生成 AAB。","materials":"完整工程、对应 SDK / Demo / 文档、自己的 AppsFlyer 参数；真机测试需证书、描述文件和设备。"},"04-sdk/04-ios":{"partner":"04","title":"04 · iOS / Adjust","summary":"接入 PA / PAKit 与 Adjust，将合作方业务事件对应到归因平台，并处理 iOS 跟踪授权。","project":"可由 Xcode 打开的 iOS 工程（.xcodeproj 或 .xcworkspace）。","features":["PA / PAKit","Adjust 事件映射","ATT 跟踪授权","加载与安全区域"],"output":"接入后的 iOS 工程及正式 / 测试配置检查；不生成 AAB。","materials":"完整工程、对应 SDK / Demo / 文档、自己的 Adjust App Token 与事件配置，以及所需 iOS 签名。"},"05-sdk/05-ios":{"partner":"05","title":"05 · iOS / Adjust","summary":"接入 PA / PAKit、Adjust 与 ATT，处理加载画面和安全区域，并辅助真机测试交付。","project":"可由 Xcode 打开的 iOS 工程（.xcodeproj 或 .xcworkspace）。","features":["PA / PAKit","Adjust 归因","ATT / 安全区域","真机测试辅助"],"output":"接入后的 iOS 工程，可按需求提供测试构建、安装或自包含 .command 工具；不生成 AAB。","materials":"完整工程、对应 SDK / Demo / 文档、自己的 Adjust 参数；测试构建需 iOS 签名与设备。"},"05-sdk/05-android":{"partner":"05","title":"05 · Android / Adjust","summary":"通过 Maven 接入 PA / PAKit 与 Adjust，合并生命周期、依赖和业务事件映射。","project":"包含 Gradle 配置的 Android / Android Studio 工程根目录。","features":["PA / PAKit Maven SDK","Adjust 归因","生命周期合并","业务事件映射"],"output":"接入工程及独立测试 APK；正式 AAB 需明确提出并使用原签名。","materials":"完整工程、合作方 Maven / SDK 接入资料、自己的 Adjust 参数；正式打包需原签名和 Android 工具链。"}},"guidance":"01–05 是合作方编号，不代表版本高低。SDK 已接入、只需生成 Android AAB 时，可直接使用“GP打包”。","requirements":"接入时请提供对应合作方的资料和自己的配置，实际构建取决于工程、依赖、工具链与签名是否齐备。","terms":[["AppsFlyer / Adjust","识别用户来自哪条广告，并上报相关事件的归因服务。"],["PA / PAKit","合作方业务 SDK，具体能力以该合作方的版本和文档为准。"],["WebView / H5","在应用里显示网页的界面。"],["ATT / GAID","ATT 是 iOS 跟踪授权；GAID 是 Android 的 Google 广告标识。"]]};
+function AabSdkProfileIntro({selection}) {
+  const info = AabSdkIntroductions.profiles[selection?.key];
+  if(!info) return (0,Y.jsx)('p',{className:'sdk-profile-description',children:selection?.profile.description || '请参阅该合作方提供的接入文档。'});
+  return (0,Y.jsxs)('section',{
+    className:'sdk-module-intro','aria-label':'所选模块简介',
+    children:[
+      (0,Y.jsx)('h3',{children:info.title}),
+      (0,Y.jsx)('p',{className:'sdk-module-lead',children:info.summary}),
+      (0,Y.jsx)('ul',{className:'sdk-module-tags','aria-label':'主要功能',children:info.features.map(text=>(0,Y.jsx)('li',{children:text},text))}),
+      (0,Y.jsx)('dl',{className:'sdk-module-facts',children:[['适用工程',info.project],['预期交付',info.output],['需要准备',info.materials]].map(([label,text])=>(0,Y.jsxs)('div',{children:[(0,Y.jsx)('dt',{children:label}),(0,Y.jsx)('dd',{children:text})]},label))})
+    ]
+  });
+}
+function AabSdkOverview({profiles}) {
+  if(!profiles.length) return null;
+  const groups = [...new Set(profiles.map(p=>p.partner))].map(partner=>({partner,profiles:profiles.filter(p=>p.partner===partner)}));
+  return (0,Y.jsxs)('details',{
+    className:'sdk-module-overview',
+    children:[
+      (0,Y.jsxs)('summary',{children:[(0,Y.jsx)('strong',{children:'模块用途速览'}),(0,Y.jsx)('span',{children:'合作方、适用平台与常用术语 · 展开查看'})]}),
+      (0,Y.jsx)('p',{className:'sdk-module-guidance',children:AabSdkIntroductions.guidance}),
+      (0,Y.jsx)('div',{className:'sdk-module-grid',children:groups.map(group=>(0,Y.jsxs)('article',{className:'sdk-module-card',children:[
+        (0,Y.jsx)('h3',{children:'合作方 '+group.partner}),
+        (0,Y.jsx)('p',{children:group.profiles.length > 1 && group.profiles.every(p=>AabSdkIntroductions.profiles[p.key]) ? AabSdkIntroductions.partners[group.partner] : group.profiles.map(p=>p.profile.description || '请参阅对应合作方的接入文档。').join(' ')}),
+        (0,Y.jsx)('ul',{className:'sdk-module-tags','aria-label':'可选平台',children:[...new Set(group.profiles.map(p=>p.profile.platform==='ios'?'iOS':p.profile.platform==='android'?'Android':p.profile.platform))].map(platform=>(0,Y.jsx)('li',{children:platform},platform))})
+      ]},group.partner))}),
+      (0,Y.jsx)('dl',{className:'sdk-module-terms',children:AabSdkIntroductions.terms.map(([term,text])=>(0,Y.jsxs)('div',{children:[(0,Y.jsx)('dt',{children:term}),(0,Y.jsx)('dd',{children:text})]},term))}),
+      (0,Y.jsx)('p',{className:'sdk-module-requirements',children:AabSdkIntroductions.requirements})
+    ]
+  });
+}
+function mi({plugins: e, tasks: t, selectedTaskId: n, active: r, settings: i, nativeDialog: a, onUpdateTask: o, navigate: s, notify: c}) {
+  let l = gr()?.role !== `member`, u = (0, D.useMemo)(() => e.filter(e => e.kind === `sdk` && e.id !== `gp-build`).flatMap(e => e.profiles.map(t => ({
+    key: `${e.id}/${t.id}`,
+    partner: t.partner || t.name,
+    plugin: e,
+    profile: t
+  }))), [e]), [d, f] = (0, D.useState)(``), [p, m] = (0, D.useState)(``), h = u.filter(e => e.partner === d), g = h.find(e => e.key === p) || h[0], _ = g?.profile, v = g?.partner === `01` || g?.plugin.id === `01sdk`, [y, b] = (0, D.useState)(1), [x, S] = (0, D.useState)(``), [C, w] = (0, D.useState)(``), [T, E] = (0, D.useState)({}), [O, k] = (0, D.useState)(``), [A, j] = (0, D.useState)(``), [M, N] = (0, D.useState)({}), [P, F] = (0, D.useState)(``), [I, L] = (0, D.useState)(``), [R, z] = (0, D.useState)(!1), [B, te] = (0, D.useState)(!1), [ne, re] = (0, D.useState)(!1), [ie, ae] = (0, D.useState)(0), [V, oe] = (0, D.useState)(null), [ce, H] = (0, D.useState)(``), U = (0, D.useRef)(0), le = (0, D.useRef)(!1), ue = (0, D.useRef)(null), fe = (0, D.useRef)(null), W = Zn(i), G = t.find(e => e.id === n), me = t.filter(e => e.profileId && e.projectPath && e.pluginId !== `gp-build`), he = _?.parameters.filter(e => e.required) || [], ge = _?.parameters.filter(e => !e.required) || [], _e = !_ || !C || (C === `unity` ? v : C === `xcode` ? _.platform === `ios` : _.platform === `android`), ve = V && V.type !== `unknown` && C && V.type !== C, be = v && V && _ ? ei(V, _.platform) : void 0, xe = !(!x.trim() || !C || !_e || I || ve || ne || be);
+  ((0, D.useEffect)(() => {
+    (E(nr(_?.parameters || [])), k(``), N({}), F(``));
+  }, [g?.key, g?.plugin.version, _?.version]), (0, D.useEffect)(() => {
+    if (!x.trim() || n || !r) return;
+    let e = !1, t = U.current;
+    re(!0);
+    let i = window.setTimeout(() => {
+      q.inspectProject(x.trim(), void 0, v ? `01` : void 0).then(n => {
+        e || t !== U.current || (oe(n), n.type === `unknown` ? L(`没有识别到工程，请选择包含 ProjectSettings、.xcodeproj / .xcworkspace 或 Gradle 配置的根目录。`) : w(e => e || n.type));
+      }).catch(n => {
+        !e && t === U.current && L(J(n));
+      }).finally(() => {
+        !e && t === U.current && re(!1);
+      });
+    }, 400);
+    return () => {
+      (e = !0, window.clearTimeout(i));
+    };
+  }, [x, n, r, v, ie]));
+  function Se(e) {
+    (U.current++, S(e), w(``), oe(null), L(``), F(``), H(``), re(!!e.trim()));
+  }
+  function Ce() {
+    (U.current++, oe(null), re(!0), L(``), F(``), ae(e => e + 1));
+  }
+  async function we() {
+    (te(!0), H(``));
+    try {
+      let e = await q.chooseDirectory();
+      e.path && !e.cancelled ? Se(e.path) : H(`已取消选择，当前工程保留。`);
+    } catch (e) {
+      F(J(e));
+    } finally {
+      te(!1);
+    }
+  }
+  function Te(e, t) {
+    (E(n => ({
+      ...n,
+      [e]: t
+    })), N(t => {
+      let n = {
+        ...t
+      };
+      return (delete n[e], n);
+    }));
+  }
+  async function Ee() {
+    if (le.current) return;
+    if ((F(``), !g)) {
+      (b(1), F(d ? `合作方 ${d} 暂无可用的接入方案，请先配置。` : `请先选择合作方和接入版本。`));
+      return;
+    }
+    if (!W) {
+      l ? s(`settings`) : F(`请联系管理员配置本机模型连接。`);
+      return;
+    }
+    if (!xe || !C) {
+      (b(2), F(be || `请先确认本地工程和工程类型。`), ue.current?.focus());
+      return;
+    }
+    let e = rr(g.profile.parameters, T);
+    if ((N(e.errors), Object.keys(e.errors).length)) {
+      (b(3), fe.current && ge.some(t => e.errors[t.key]) && (fe.current.open = !0), F(`请补齐标记的接入参数。`));
+      return;
+    }
+    let t = O.trim();
+    (le.current = !0, z(!0));
+    try {
+      let n = await q.createTask({
+        pluginId: g.plugin.id,
+        profileId: g.profile.id,
+        projectPath: x.trim(),
+        projectType: C,
+        parameters: e.values,
+        mode: `execute`,
+        ...t ? {
+          customContext: t
+        } : {},
+        ...A.trim() ? {
+          prompt: A.trim()
+        } : {}
+      });
+      (E(e => ir(e, g.profile.parameters)), k(``), j(``), o(n), s(`sdk`, n.id));
+    } catch (e) {
+      F(J(e));
+    } finally {
+      (le.current = !1, z(!1));
+    }
+  }
+  function De() {
+    (F(``), b(1), s(`sdk`));
+  }
+  return (0, Y.jsxs)(`div`, {
+    className: `sdk-page tw-root`,
+    children: [(0, Y.jsx)(sr, {
+      eyebrow: `SDK INTEGRATION`,
+      title: `SDK 接入`,
+      description: u.length || n ? `选好合作方和工程，接入交给 AI。后续需求，都在这里聊。` : `选择合作方类型，等待上传对应的接入 Skill。`,
+      actions: (0, Y.jsxs)(Y.Fragment, {
+        children: [me.length > 0 && (0, Y.jsxs)(`label`, {
+          className: `sdk-history`,
+          children: [(0, Y.jsx)(Zt, {
+            size: 15
+          }), (0, Y.jsxs)(`select`, {
+            "aria-label": `接入历史`,
+            value: n || ``,
+            onChange: e => e.target.value ? s(`sdk`, e.target.value) : De(),
+            children: [(0, Y.jsx)(`option`, {
+              value: ``,
+              children: `接入历史`
+            }), n && !me.some(e => e.id === n) && (0, Y.jsx)(`option`, {
+              value: n,
+              children: `当前接入`
+            }), me.map(e => (0, Y.jsxs)(`option`, {
+              value: e.id,
+              children: [er(e.projectPath), ` · `, Jn[e.status], ` · `, Qn(e.createdAt)]
+            }, e.id))]
+          })]
+        }), n && (0, Y.jsx)(X, {
+          icon: Gt,
+          onClick: De,
+          children: `新建接入`
+        })]
+      })
+    }), n ? (0, Y.jsxs)(Y.Fragment, {
+      children: [G && (0, Y.jsxs)(`details`, {
+        className: `sdk-session-context`,
+        children: [(0, Y.jsxs)(`summary`, {
+          children: [(0, Y.jsx)(`span`, {
+            className: `sdk-context-icon`,
+            children: (0, Y.jsx)(rt, {
+              size: 18
+            })
+          }), (0, Y.jsxs)(`span`, {
+            className: `sdk-context-name`,
+            children: [(0, Y.jsx)(`strong`, {
+              children: er(G.projectPath)
+            }), (0, Y.jsx)(`span`, {
+              children: G.name
+            })]
+          }), (0, Y.jsx)(`span`, {
+            className: `sdk-context-type`,
+            children: fi(G.projectType || G.report?.type)
+          }), (0, Y.jsxs)(`span`, {
+            className: `sdk-context-toggle`,
+            children: [`接入配置`, (0, Y.jsx)(pe, {
+              size: 14
+            })]
+          })]
+        }), (0, Y.jsxs)(`dl`, {
+          children: [(0, Y.jsx)(`dt`, {
+            children: `工程目录`
+          }), (0, Y.jsx)(`dd`, {
+            children: G.projectPath
+          }), (0, Y.jsx)(`dt`, {
+            children: `方案版本`
+          }), (0, Y.jsx)(`dd`, {
+            children: G.profileVersion || G.skillVersion || `见任务记录`
+          }), (0, Y.jsx)(`dt`, {
+            children: `Skill 版本`
+          }), (0, Y.jsx)(`dd`, {
+            children: G.skillVersion || `—`
+          }), (0, Y.jsx)(`dt`, {
+            children: `接入参数`
+          }), (0, Y.jsx)(`dd`, {
+            children: Object.entries(G.parameters).map(([e, t]) => (0, Y.jsxs)(`span`, {
+              children: [e, `：`, String(t)]
+            }, e))
+          })]
+        })]
+      }), (0, Y.jsx)(`section`, {
+        className: `sdk-conversation sdk-conversation-active`,
+        "aria-label": `SDK 接入对话`,
+        children: (0, Y.jsx)(ui, {
+          taskId: n,
+          task: G,
+          isNew: !1,
+          active: r,
+          settings: i,
+          navigate: s,
+          onUpdateTask: o,
+          notify: c,
+          refreshGeneration: 0,
+          embeddedSdk: !0
+        }, n)
+      })]
+    }) : (0, Y.jsxs)(Y.Fragment, {
+      children: [(0, Y.jsx)(AabSdkOverview, {
+        profiles: u
+      }), (0, Y.jsxs)(`div`, {
+        className: `sdk-setup`,
+        "aria-label": `接入配置`,
+        children: [(0, Y.jsxs)(`section`, {
+          className: `sdk-step${!g || y === 1 ? ` sdk-step-open` : ``}`,
+          children: [(0, Y.jsxs)(`button`, {
+            className: `sdk-step-heading`,
+            "aria-expanded": !g || y === 1,
+            "aria-controls": `sdk-partner-panel`,
+            disabled: R,
+            onClick: () => b(1),
+            children: [(0, Y.jsx)(`span`, {
+              className: `sdk-step-number${g ? ` sdk-step-done` : ``}`,
+              children: g ? (0, Y.jsx)(de, {
+                size: 14
+              }) : `1`
+            }), (0, Y.jsx)(`strong`, {
+              children: `选择合作方`
+            }), (0, Y.jsx)(`span`, {
+              className: `sdk-step-summary`,
+              children: g ? `${g.partner} · ${_?.attribution} · v${_?.version}` : d ? `${d} · Skill 待上传` : `合作方类型`
+            }), (0, Y.jsx)(pe, {
+              size: 16
+            })]
+          }), (0, Y.jsxs)(`div`, {
+            id: `sdk-partner-panel`,
+            className: `sdk-step-body`,
+            hidden: !!g && y !== 1,
+            children: [(0, Y.jsxs)(`div`, {
+              className: `form-grid`,
+              children: [(0, Y.jsxs)(`div`, {
+                className: `field`,
+                children: [(0, Y.jsx)(`label`, {
+                  htmlFor: `sdk-partner`,
+                  children: `合作方类型`
+                }), (0, Y.jsxs)(`select`, {
+                  id: `sdk-partner`,
+                  value: d,
+                  disabled: R,
+                  onChange: e => {
+                    let t = e.target.value;
+                    (f(t), m(u.find(e => e.partner === t)?.key || ``), F(``));
+                  },
+                  children: [(0, Y.jsx)(`option`, {
+                    value: ``,
+                    disabled: !0,
+                    children: `请选择合作方`
+                  }), Yr.map(e => (0, Y.jsx)(`option`, {
+                    value: e,
+                    children: e
+                  }, e))]
+                })]
+              }), h.length > 0 && (0, Y.jsxs)(`div`, {
+                className: `field`,
+                children: [(0, Y.jsx)(`label`, {
+                  htmlFor: `sdk-version`,
+                  children: `接入方案 / 版本`
+                }), (0, Y.jsx)(`select`, {
+                  id: `sdk-version`,
+                  value: g?.key || ``,
+                  disabled: R,
+                  onChange: e => m(e.target.value),
+                  children: h.map(e => (0, Y.jsxs)(`option`, {
+                    value: e.key,
+                    children: [e.profile.platform === `ios` ? `iOS` : `Android`, ` · `, e.profile.attribution, ` · v`, e.profile.version]
+                  }, e.key))
+                })]
+              })]
+            }), _ && (0, Y.jsx)(AabSdkProfileIntro, {
+              selection: g
+            }), !h.length && (0, Y.jsx)(`p`, {
+              className: `sdk-profile-description`,
+              role: `status`,
+              children: d ? `合作方 ${d} 的接入 Skill 待上传。` : u.length ? `选择合作方后，查看该方案的用途、适用工程和准备材料。` : `各合作方的接入 Skill 待上传。`
+            }), g && (0, Y.jsx)(`div`, {
+              className: `sdk-step-next`,
+              children: (0, Y.jsx)(X, {
+                compact: !0,
+                icon: ee,
+                disabled: R,
+                onClick: () => b(2),
+                children: `选择工程`
+              })
+            })]
+          })]
+        }), g && (0, Y.jsxs)(Y.Fragment, {
+          children: [(0, Y.jsxs)(`section`, {
+            className: `sdk-step${y === 2 ? ` sdk-step-open` : ``}`,
+            children: [(0, Y.jsxs)(`button`, {
+              className: `sdk-step-heading`,
+              "aria-expanded": y === 2,
+              "aria-controls": `sdk-project-panel`,
+              disabled: !g || R,
+              onClick: () => b(2),
+              children: [(0, Y.jsx)(`span`, {
+                className: `sdk-step-number${xe ? ` sdk-step-done` : ``}`,
+                children: xe ? (0, Y.jsx)(de, {
+                  size: 14
+                }) : `2`
+              }), (0, Y.jsx)(`strong`, {
+                children: `选择本地工程`
+              }), (0, Y.jsx)(`span`, {
+                className: `sdk-step-summary`,
+                children: x ? `${er(x)}${C ? ` · ${fi(C)}` : ``}` : `工程目录与类型`
+              }), (0, Y.jsx)(pe, {
+                size: 16
+              })]
+            }), (0, Y.jsxs)(`div`, {
+              id: `sdk-project-panel`,
+              className: `sdk-step-body`,
+              hidden: y !== 2,
+              children: [(0, Y.jsxs)(`div`, {
+                className: `field${I ? ` field-invalid` : ``}`,
+                children: [(0, Y.jsx)(`label`, {
+                  htmlFor: `sdk-project-path`,
+                  children: `工程目录`
+                }), (0, Y.jsxs)(`div`, {
+                  className: `input-with-button`,
+                  children: [(0, Y.jsxs)(`div`, {
+                    className: `input-leading-icon`,
+                    children: [(0, Y.jsx)(rt, {
+                      size: 17
+                    }), (0, Y.jsx)(`input`, {
+                      ref: ue,
+                      id: `sdk-project-path`,
+                      value: x,
+                      onChange: e => Se(e.target.value),
+                      placeholder: `选择文件夹，或输入本地工程的绝对路径`,
+                      autoComplete: `off`,
+                      spellCheck: !1,
+                      disabled: R || B,
+                      "aria-invalid": !!I,
+                      "aria-describedby": `sdk-path-help`
+                    })]
+                  }), (0, Y.jsx)(X, {
+                    icon: rt,
+                    loading: B,
+                    disabled: !a || R,
+                    title: a ? `选择本地工程目录` : `请在输入框填写本地绝对路径`,
+                    onClick: () => void we(),
+                    children: `选择文件夹`
+                  })]
+                }), (0, Y.jsx)(`p`, {
+                  id: `sdk-path-help`,
+                  className: I ? `field-error` : `field-help`,
+                  children: I || ce || `选择工程根目录，AI 会在工作副本中完成接入。`
+                })]
+              }), (0, Y.jsxs)(`fieldset`, {
+                className: `sdk-project-types`,
+                disabled: R,
+                children: [(0, Y.jsx)(`legend`, {
+                  children: `工程类型`
+                }), (0, Y.jsx)(`div`, {
+                  children: di.map(e => {
+                    let t = e.value === `unity` ? v : e.value === `xcode` ? _?.platform === `ios` : _?.platform === `android`;
+                    return (0, Y.jsxs)(`label`, {
+                      className: `${C === e.value ? `sdk-type-selected` : ``}${t ? `` : ` sdk-type-unavailable`}`,
+                      children: [(0, Y.jsx)(`input`, {
+                        type: `radio`,
+                        name: `sdk-project-type`,
+                        value: e.value,
+                        checked: C === e.value,
+                        disabled: !t,
+                        onChange: () => w(e.value)
+                      }), (0, Y.jsxs)(`span`, {
+                        children: [(0, Y.jsx)(`strong`, {
+                          children: e.label
+                        }), (0, Y.jsx)(`small`, {
+                          children: t ? e.detail : `当前方案不适用`
+                        })]
+                      }), C === e.value && (0, Y.jsx)(de, {
+                        size: 15
+                      })]
+                    }, e.value);
+                  })
+                })]
+              }), (0, Y.jsx)(`div`, {
+                className: `sdk-scan-status`,
+                role: `status`,
+                children: ne ? (0, Y.jsxs)(Y.Fragment, {
+                  children: [(0, Y.jsx)(Tt, {
+                    size: 13,
+                    className: `spin`
+                  }), `正在识别工程…`]
+                }) : ve ? (0, Y.jsxs)(`span`, {
+                  className: `field-error`,
+                  children: [`实际识别为 `, fi(V?.type), `，请确认工程类型。`]
+                }) : _e ? V?.type === `unity` ? (0, Y.jsxs)(Y.Fragment, {
+                  children: [be ? (0, Y.jsx)(ye, {
+                    size: 13
+                  }) : (0, Y.jsx)(de, {
+                    size: 13
+                  }), pi(V, !!v)]
+                }) : V && V.type !== `unknown` ? (0, Y.jsxs)(Y.Fragment, {
+                  children: [(0, Y.jsx)(de, {
+                    size: 13
+                  }), `已识别 `, fi(V.type), ` 工程`]
+                }) : (0, Y.jsx)(`span`, {
+                  children: `选择目录后自动识别，也可以手动选择工程类型。`
+                }) : (0, Y.jsx)(`span`, {
+                  className: `field-error`,
+                  children: `此工程与合作方的目标平台不匹配，请更换工程或方案。`
+                })
+              }), be && V && _ && (0, Y.jsxs)(Z, {
+                tone: `warning`,
+                title: `Unity 环境需要准备`,
+                children: [(0, Y.jsx)(`p`, {
+                  children: Qr(V, _.platform)
+                }), (0, Y.jsx)(`p`, {
+                  children: be
+                }), (0, Y.jsx)(`p`, {
+                  children: `确认已完成编辑器及平台模块安装后重新扫描；只下载安装包不会完成安装。自定义安装目录请先在 Unity Hub 中定位该编辑器。`
+                }), V.unityToolchain && (0, Y.jsxs)(`details`, {
+                  className: `sdk-unity-diagnostics`,
+                  children: [(0, Y.jsx)(`summary`, {
+                    children: `查看本次扫描详情`
+                  }), V.unityToolchain.versionCandidates.length > 0 && (0, Y.jsxs)(Y.Fragment, {
+                    children: [(0, Y.jsx)(`p`, {
+                      children: `已找到的同版本编辑器：`
+                    }), (0, Y.jsx)(`ul`, {
+                      children: V.unityToolchain.versionCandidates.map(e => (0, Y.jsxs)(`li`, {
+                        children: [(0, Y.jsx)(`code`, {
+                          children: e.path
+                        }), (0, Y.jsx)(`br`, {}), `版本：`, e.version, `；revision：`, e.revision || `未能读取`]
+                      }, e.path))
+                    })]
+                  }), V.unityToolchain.scanWarnings.length > 0 && (0, Y.jsxs)(Y.Fragment, {
+                    children: [(0, Y.jsx)(`p`, {
+                      children: `扫描中遇到的问题：`
+                    }), (0, Y.jsx)(`ul`, {
+                      children: V.unityToolchain.scanWarnings.map((e, t) => (0, Y.jsx)(`li`, {
+                        children: e
+                      }, t))
+                    })]
+                  }), (0, Y.jsx)(`p`, {
+                    children: `已扫描的位置：`
+                  }), (0, Y.jsx)(`ul`, {
+                    children: V.unityToolchain.searchedPaths.map(e => (0, Y.jsx)(`li`, {
+                      children: (0, Y.jsx)(`code`, {
+                        children: e
+                      })
+                    }, e))
+                  })]
+                }), (0, Y.jsx)(`div`, {
+                  className: `form-actions`,
+                  children: (0, Y.jsx)(X, {
+                    compact: !0,
+                    icon: Yt,
+                    loading: ne,
+                    disabled: R || ne,
+                    onClick: Ce,
+                    children: V.unityToolchain?.versionIssue || V.unityDistribution === `unknown` ? `确认并重新扫描` : `已安装，确认并重新扫描`
+                  })
+                })]
+              }), (0, Y.jsx)(`div`, {
+                className: `sdk-step-next`,
+                children: (0, Y.jsx)(X, {
+                  compact: !0,
+                  icon: ee,
+                  disabled: !xe || R,
+                  onClick: () => b(3),
+                  children: `填写接入参数`
+                })
+              })]
+            })]
+          }), (0, Y.jsxs)(`section`, {
+            className: `sdk-step${y === 3 ? ` sdk-step-open` : ``}`,
+            children: [(0, Y.jsxs)(`button`, {
+              className: `sdk-step-heading`,
+              "aria-expanded": y === 3,
+              "aria-controls": `sdk-parameters-panel`,
+              disabled: !g || !xe || R,
+              onClick: () => b(3),
+              children: [(0, Y.jsx)(`span`, {
+                className: `sdk-step-number`,
+                children: `3`
+              }), (0, Y.jsx)(`strong`, {
+                children: `提供接入参数`
+              }), (0, Y.jsx)(`span`, {
+                className: `sdk-step-summary`,
+                children: _ ? `${_.attribution} · 参数随方案版本加载` : `根据合作方方案填写`
+              }), (0, Y.jsx)(pe, {
+                size: 16
+              })]
+            }), (0, Y.jsxs)(`div`, {
+              id: `sdk-parameters-panel`,
+              className: `sdk-step-body`,
+              hidden: y !== 3,
+              children: [(0, Y.jsx)(`p`, {
+                className: `sdk-parameter-hint`,
+                children: `填写本次工程的参数，AI 会结合所选方案和工程继续处理。`
+              }), he.length ? (0, Y.jsx)(Xr, {
+                definitions: he,
+                values: T,
+                errors: M,
+                nativeDialog: a,
+                disabled: R,
+                onChange: Te
+              }) : (0, Y.jsx)(`p`, {
+                className: `field-help`,
+                children: `此方案没有预置参数，请在下方按本次接入口径填写。`
+              }), ge.length > 0 && (0, Y.jsxs)(`details`, {
+                className: `sdk-optional`,
+                ref: fe,
+                children: [(0, Y.jsxs)(`summary`, {
+                  children: [`更多参数与凭据`, (0, Y.jsxs)(`span`, {
+                    children: [ge.length, ` 项`, (0, Y.jsx)(pe, {
+                      size: 14
+                    })]
+                  })]
+                }), (0, Y.jsx)(Xr, {
+                  definitions: ge,
+                  values: T,
+                  errors: M,
+                  nativeDialog: a,
+                  disabled: R,
+                  onChange: Te
+                })]
+              }, p), (0, Y.jsxs)(`div`, {
+                className: `field sdk-custom-parameters`,
+                children: [(0, Y.jsx)(`label`, {
+                  htmlFor: `sdk-custom-parameters`,
+                  children: `自定义接入参数（原样交给 AI）`
+                }), (0, Y.jsx)(`textarea`, {
+                  id: `sdk-custom-parameters`,
+                  value: O,
+                  onChange: e => k(e.target.value),
+                  rows: 4,
+                  disabled: R,
+                  spellCheck: !1,
+                  placeholder: `格式不限，例如把整行参数、表格或 JSON 直接粘贴到这里，AI 会按原文理解。`,
+                  "aria-describedby": `sdk-custom-parameters-help`
+                }), (0, Y.jsx)(`p`, {
+                  id: `sdk-custom-parameters-help`,
+                  className: `field-help`,
+                  children: `不做字段和格式校验；内容会原样交给 AI 结合方案与工程理解。`
+                })]
+              })]
+            })]
+          })]
+        })]
+      }), g && (0, Y.jsxs)(`section`, {
+        className: `sdk-conversation sdk-conversation-new`,
+        "aria-label": `SDK 接入对话`,
+        children: [(0, Y.jsxs)(`header`, {
+          className: `sdk-chat-heading`,
+          children: [(0, Y.jsx)(se, {
+            size: 20
+          }), (0, Y.jsxs)(`div`, {
+            children: [(0, Y.jsx)(`h2`, {
+              children: `和 AI 一起完成接入`
+            }), (0, Y.jsx)(`p`, {
+              children: `你的选择会自动整理为接入任务。开始后，在这里查看进度、补充需求或处理问题。`
+            })]
+          })]
+        }), (0, Y.jsxs)(`div`, {
+          className: `sdk-prompt-context`,
+          children: [(0, Y.jsx)(`span`, {
+            children: d || `待选合作方`
+          }), (0, Y.jsx)(`span`, {
+            children: x ? er(x) : `待选工程`
+          }), (0, Y.jsx)(`span`, {
+            children: C ? fi(C) : `待确认类型`
+          })]
+        }), P && (0, Y.jsx)(Z, {
+          tone: `error`,
+          children: P
+        }), !W && (0, Y.jsxs)(Z, {
+          tone: `warning`,
+          children: [l ? `请先配置模型连接，配置后可回来继续接入。` : `请联系管理员配置本机模型连接。`, l && (0, Y.jsx)(X, {
+            variant: `ghost`,
+            compact: !0,
+            onClick: () => s(`settings`),
+            children: `打开设置`
+          })]
+        }), (0, Y.jsxs)(`form`, {
+          className: `sdk-start-composer`,
+          onSubmit: e => {
+            (e.preventDefault(), Ee());
+          },
+          children: [(0, Y.jsx)(`textarea`, {
+            "aria-label": `补充接入需求`,
+            value: A,
+            onChange: e => j(e.target.value),
+            rows: 3,
+            maxLength: 3e4,
+            disabled: R,
+            placeholder: `还可以补充特殊需求、协议说明或本次要调整的内容…`,
+            onKeyDown: e => {
+              e.key === `Enter` && !e.shiftKey && !e.nativeEvent.isComposing && e.keyCode !== 229 && (e.preventDefault(), Ee());
+            }
+          }), (0, Y.jsxs)(`div`, {
+            children: [(0, Y.jsx)(`span`, {
+              className: `sdk-start-note`,
+              children: `选择完成后，AI 自动开始处理`
+            }), (0, Y.jsx)(X, {
+              type: `submit`,
+              variant: `primary`,
+              icon: W ? Vt : un,
+              loading: R,
+              disabled: R || B || ne || !!be || !W && !l,
+              children: W ? `开始接入` : l ? `配置模型` : `等待管理员配置`
+            })]
+          })]
+        })]
+      })]
+    })]
+  });
+}var hi={category:`other`,projectPath:``,versionName:``,versionCode:``,module:``,variant:``};function gi(e){try{let t=JSON.parse(localStorage.getItem(e)||`{}`);if(!t||typeof t!=`object`||Array.isArray(t))return hi;let n=Object.fromEntries(Object.keys(hi).map(e=>[e,typeof t[e]==`string`?t[e]:``]));return{...n,category:n.category===`game`?`game`:`other`}}catch{return hi}}function _i(e){try{return localStorage.getItem(e)||``}catch{return``}}function vi(e){return e?e.stage===`preparing`?0:e.stage===`compiling`||e.stage===`repairing`?1:e.stage===`awaiting_input`?e.resumeStage===`packaging`?3:1:e.stage===`awaiting_confirmation`?2:e.stage===`packaging`||e.stage===`completed`||e.approvedAt?3:e.compiledAt?2:1:-1}function yi({tasks: e, plugins: t, settings: n, nativeDialog: r, taskId: i, navigate: a, onUpdateTask: o, notify: s}) {
   let c = gr(), l = c?.role !== `member`, u = _r(`partner-agent.gp-build.draft`, c?.id), d = _r(`partner-agent.gp-build.task`, c?.id), [f, p] = (0, D.useState)(() => gi(u)), [m, h] = (0, D.useState)(() => _i(d)), [g, _] = (0, D.useState)({}), [v, y] = (0, D.useState)(``), [b, x] = (0, D.useState)(null), [S, C] = (0, D.useState)(!1), [w, T] = (0, D.useState)(null), [E, O] = (0, D.useState)(``), [k, A] = (0, D.useState)(`chat`), [j, M] = (0, D.useState)(``), N = (0, D.useRef)(null), P = (0, D.useRef)(!0), F = (0, D.useRef)(``), I = (0, D.useMemo)(() => e.filter(e => e.gpBuild), [e]), L = i || m, R = I.find(e => e.id === L), z = R?.gpBuild, B = !!(R && Xn(R.status) && R.status !== `waiting_approval`), te = z?.stage === `awaiting_confirmation`, ne = !!(b || B || te), re = Zn(n), ie = t.some(e => e.id === `gp-build`), ae = R?.artifacts.find(e => e.type === `file` && e.name.endsWith(`.aab`)), V = vi(z);
   ((0, D.useEffect)(() => {
     try {

@@ -5,7 +5,7 @@
   "version": "1.0.0",
   "kind": "sdk",
   "status": "ready",
-  "description": "02 合作方 SDK 接入（Android 原生工程）。",
+  "description": "面向 Android 工程，接入 PA SDK、AppsFlyer 与广告标识，检查启动和网页流程。",
   "tags": [
     "SDK",
     "02",
@@ -18,7 +18,7 @@
       "name": "02SDK 接入 · Android",
       "version": "2026.11.12.1",
       "platform": "android",
-      "description": "02 合作方 SDK 接入；流程与 01 大致相同，工程为 Android Gradle 原生工程（非 Unity）。",
+      "description": "接入合作方 PA SDK、AppsFlyer 和 GAID 广告标识，处理启动、网页显示与方向恢复。",
       "attribution": "custom",
       "skill": {
         "path": "skills/02gp-sdk-integration/SKILL.md",
